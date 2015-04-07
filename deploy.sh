@@ -31,6 +31,10 @@ if [ ! -d d3 ]; then
     git clone https://github.com/mbostock/d3.git
 fi
 
+if [ ! -f dict/english.js ]; then
+    python3 js.py
+fi
+
 FONTS="Essays1743-bold-italic.eot Essays1743-bold-italic.ttf Essays1743-bold-italic.woff Essays1743-bold.eot Essays1743-bold.ttf Essays1743-bold.woff Essays1743-italic.eot Essays1743-italic.ttf Essays1743-italic.woff Essays1743.eot Essays1743.ttf Essays1743.woff"
 
 for f in $FONTS; do
