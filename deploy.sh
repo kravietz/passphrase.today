@@ -1,7 +1,5 @@
 #!/bin/sh
 
-set -x
-
 if [ ! -f compiler.jar ]; then
     f="compiler-latest.zip"
     wget "http://dl.google.com/closure-compiler/$f"
