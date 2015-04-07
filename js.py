@@ -55,7 +55,7 @@ def fetch_dict(k, v):
 
     # write to output files static/dict/english.js etc
     # output files are UTF-8 encoded
-    fout = open(os.path.join('static', 'dict', '{}.js'.format(lang_code)), 'w')
+    fout = open(os.path.join('dict', '{}.js'.format(lang_code)), 'w')
 
     rr = re.compile(transform)
 
