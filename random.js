@@ -4,13 +4,14 @@
  */
 "use strict";
 
-// This class implements algorithms for converting a random binary value
-// as received from the PRNG to an integer index of specific range.
-// NIST has described algorithms for such conversion that minimizes
-// likelihood of skew of the result index. These algorithms are described
-// in NIST SP800-90A section B.5
-// http://csrc.nist.gov/publications/nistpubs/800-90A/SP800-90A.pdf
 /**
+ * This class implements algorithms for converting a random binary value
+ * as received from the PRNG to an integer index of specific range.
+ * NIST has described algorithms for such conversion that minimizes
+ * likelihood of skew of the result index. These algorithms are described
+ * in NIST SP800-90A section B.5
+ * http://csrc.nist.gov/publications/nistpubs/800-90A/SP800-90A.pdf
+ *
  * @constructor
  */
 function NistRandom() {
