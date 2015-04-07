@@ -1,0 +1,27 @@
+CACHE MANIFEST
+index.html
+main.js
+sjcl.js
+dict/russian.js
+dict/english.js
+dict/polish.js
+bootstrap/css/bootstrap-theme.min.css
+bootstrap/css/bootstrap.min.css
+bootstrap/fonts/glyphicons-halflings-regular.eot
+bootstrap/fonts/glyphicons-halflings-regular.svg
+bootstrap/fonts/glyphicons-halflings-regular.ttf
+bootstrap/fonts/glyphicons-halflings-regular.woff
+bootstrap/fonts/glyphicons-halflings-regular.woff2
+fonts/Essays1743-bold-italic.eot
+fonts/Essays1743-bold-italic.ttf
+fonts/Essays1743-bold-italic.woff
+fonts/Essays1743-bold.eot
+fonts/Essays1743-bold.ttf
+fonts/Essays1743-bold.woff
+fonts/Essays1743-italic.eot
+fonts/Essays1743-italic.ttf
+fonts/Essays1743-italic.woff
+fonts/Essays1743.eot
+fonts/Essays1743.ttf
+fonts/Essays1743.woff
+fonts/fonts.css

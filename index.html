@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html manifest="cache.manifest">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Passphrase.Today</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Secure passphrase generator with multiple languages, entropy estimation and fully off-line calculations">
+
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="fonts/fonts.css">
+
+    <style>
+        html {
+            display: none;
+        }
+
+        #buttons {
+            padding: 10px;
+        }
+
+        #output-wrapper {
+            font-family: monospace;
+            font-weight: bold;
+            padding-top: 50px;
+            padding-bottom: 40px;
+            font-size: 120%;
+        }
+
+        #advanced-tab {
+            padding-top: 20px;
+        }
+
+        #footer {
+            padding-top: 80px;
+        }
+
+        h1 {
+            font-family: "Essays 1743", Palatino, "Palatino Linotype", "Book Antiqua", Georgia, "Times New Roman", serif;
+        }
+
+        .glyphicon.spinning {
+            animation: spin 1s infinite linear;
+            -webkit-animation: spin2 1s infinite linear;
+        }
+
+        @keyframes spin {
+            from {
+                transform: scale(1) rotate(0deg);
+            }
+            to {
+                transform: scale(1) rotate(360deg);
+            }
+        }
+
+        @-webkit-keyframes spin2 {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
+            to {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+    </style>
+
+    <!--SCRIPT-->
+    <script src="sjcl/sjcl.js"></script>
+    <script src="random.js"></script>
+    <script src="passphrase.js"></script>
+    <script src="entropy.js"></script>
+    <script src="titles.js"></script>
+    <script src="dict.js"></script>
+    <script src="app.js"></script>
+    <!--ENDSCRIPT-->
+
+</head>
+
+<body onload="start()">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1>Secure Passphrase Generator</h1>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-12 text-center" id="output-wrapper">
+            <noscript>This application requires JavaScript to be enabled.</noscript>
+
+            <span class="alert alert-info" role="alert" id="output">
+                Loading dictionary... This can take up to a few minutes but only happens once.
+                <span class="glyphicon glyphicon-refresh spinning" aria-hidden="true"></span>
+            </span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center" id="buttons">
+            <button type="button" class="btn btn-default btn-lg" onclick="pp.less()"
+                    title="Less words">
+                <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-text-background" aria-hidden="true"></span>
+            </button>
+            <button type="button" class="btn btn-primary btn-lg" onclick="ppNewPass()" title="Output new passphrase">
+                P&nbsp;<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+            </button>
+            <button type="button" class="btn btn-primary btn-lg" onclick="ppNewTrans()" title="Output new mutation of this passphrase">
+                T&nbsp;<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+            </button>
+            <button type="button" class="btn btn-default btn-lg" onclick="pp.more()"
+                    title="More words">
+                <span class="glyphicon glyphicon-text-background" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <label for="lang">
+                Language:
+            </label>
+            <select id="lang" title="Choose dictionary" onchange="switchDict()">
+                <option value="english">English</option>
+                <option value="polish">Polski</option>
+                <option value="russian">Руссккий</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-offset-4 col-xs-4 col-sm-4 col-md-4 small table-responsive" id="advanced-tab">
+            <table class="table table-condensed">
+                <thead>
+                <tr onclick="toggle()" class="active text-center">
+                    <th colspan="2">
+                        <span class="caret"></span> Advanced
+                        <span class="sr-only">Toggle advanced window</span>
+                    </td>
+                </tr>
+                </thead>
+                <tbody id="advanced" hidden>
+
+                <tr>
+                    <th colspan="2" class="text-center active">Passphrase</th>
+                </tr>
+
+                <tr>
+                    <td id="pp-word-entropy-title">
+                        Shannon word entropy
+                    </th>
+                    <td id="pp-word-entropy"></td>
+                </tr>
+                <tr>
+                    <td id="pp-nist-entropy-title">
+                        NIST character entropy
+                    </th>
+                    <td id="pp-nist-entropy"></td>
+                </tr>
+                <tr>
+                    <td id="pp-character-entropy-title">
+                        Shannon character entropy
+                    </th>
+                    <td id="pp-character-entropy"></td>
+                </tr>
+                <tr>
+                    <th id="pp-target-entropy-title">Target entropy</th>
+                    <td id="pp-target-entropy"></td>
+                </tr>
+
+                <tr>
+                    <th colspan="2" class="text-center active">Dictionary</th>
+                </tr>
+
+                <tr>
+                    <td>Word count
+                    </th>
+                    <td id="dictionary-size"></td>
+                </tr>
+                <tr>
+                    <td>Unique characters
+                    </th>
+                    <td id="alphabet-size"></td>
+                </tr>
+                <tr>
+                    <td>Entropy per character
+                    </th>
+                    <td id="entropy-per-character"></td>
+                </tr>
+                <tr>
+                    <td>Entropy per word
+                    </th>
+                    <td id="entropy-per-word"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 text-center" id="footer">
+            <a href="https://plus.google.com/+PawełKrawczyk/" rel="publisher">Contact</a>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
