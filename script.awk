@@ -1,4 +1,5 @@
-BEGIN { 
+# this script replaces development scripts by a minified ones
+BEGIN {
     script=0;
     output=1;
     endscript=0;
