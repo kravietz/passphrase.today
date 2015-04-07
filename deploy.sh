@@ -11,6 +11,11 @@ if [ ! -f htmlcompressor-1.5.3.jar ]; then
     wget https://htmlcompressor.googlecode.com/files/htmlcompressor-1.5.3.jar
 fi
 
+if [ ! -f yuicompressor.jar ]; then
+    wget https://github.com/yui/yuicompressor/releases/download/v2.4.8/yuicompressor-2.4.8.jar
+    mv yuicompressor-2.4.8.jar yuicompressor.jar
+fi
+
 if [ ! -d bootstrap ]; then
     wget https://github.com/twbs/bootstrap/releases/download/v3.3.4/bootstrap-3.3.4-dist.zip
     unzip bootstrap-3.3.4-dist.zip
