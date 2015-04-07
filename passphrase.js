@@ -4,14 +4,16 @@
  */
 "use strict";
 
-/** @const */ var DEFAULT_TARGET_ENTROPY = 35;
-/** @const */ var ENTROPY_STEP = 1;
-/** @const */ var SPECIAL_CHARS = '!#$%&()*+,-./0123456789:;<=>?@[\\]^_{}~';
+/** @const */ var /** number */ DEFAULT_TARGET_ENTROPY = 35;
+/** @const */ var /** number */ ENTROPY_STEP = 1;
+/** @const */ var /** string */ SPECIAL_CHARS = '!#$%&()*+,-./0123456789:;<=>?@[\\]^_{}~';
 
 /**
+ * Object for storing passphrase in structured format.
  * @constructor
+ * @param {?Array<string>} words
  */
-function Passphrase(words) {
+function Passphrase(/** ?Array<string> */ words) {
     if (words) {
         this.words = words;
     } else {
@@ -27,9 +29,14 @@ Passphrase.prototype.toHtml = function () {
 };
 
 /**
+ * Passphrase generator class. Uses dictionary to generate
+ * random words and can inject them into HTML sections identified
+ * by identifier id.
  * @constructor
+ * @param {Object} d
+ * @param {string} id
  */
-function PassGen(d, id) {
+function PassGen(/** Object */ d, /** string */ id) {
     this.d = d;     // dictionary
     this.id = id;   // id of the target HTML element to insert the result
     this.target_entropy = DEFAULT_TARGET_ENTROPY;

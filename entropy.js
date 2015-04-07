@@ -5,9 +5,11 @@
 "use strict";
 
 /**
+ * Estimates entropy of passphrase given the dictionary used to generate it.
  * @constructor
+ * @param {Object} dictionary
  */
-function EntropyEstimator(dictionary) {
+function EntropyEstimator(/** Object */ dictionary) {
     this.dictionary = dictionary;
 }
 

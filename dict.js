@@ -4,10 +4,14 @@
  */
 "use strict";
 
-/** @const */ var DEFAULT_LANG = 'english';
+/** @const */ var /** string */ DEFAULT_LANG = 'english';
 
 // choose a dictionary for specified language and display the first passphrase
-function loadDictionary(lang) {
+/**
+ * Load new dictionary for specified language.
+ * @param {string} lang
+ */
+function loadDictionary(/** string */ lang) {
     console.log('dictionary change=', lang);
     // validate
     switch (lang) {

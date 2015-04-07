@@ -5,6 +5,10 @@
 
 "use strict";
 
+/**
+ * Plot graphical reprentation of random number generator output.
+ */
+
 function plot() {
     sjcl.random.startCollectors();
 

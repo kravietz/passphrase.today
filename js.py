@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+# Fetch and process dictionaries supported by https://passphrase.today/
+# Written by Paweł Krawczyk 2015-04-08
+
 import json
 import math
 import os
