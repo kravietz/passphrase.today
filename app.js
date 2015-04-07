@@ -20,7 +20,15 @@ window['ppNewPass'] = function () {
 window['ppNewTrans'] = function () {
     window['pp'].insert(window['pp'].transform(window['pass']));
 
-}
+};
+window['ppLess'] = function () {
+    window['pp']['less']();
+    window['ppNewPass']();
+};
+window['ppMore'] = function () {
+    window['pp']['more']();
+    window['ppNewPass']();
+};
 
 window['start'] = function () {
     // framebuster

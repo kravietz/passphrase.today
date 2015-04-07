@@ -88,7 +88,6 @@ PassGen.prototype.less = function () {
             localStorage.setItem('spgen.target_entropy', this.target_entropy);
         }
     }
-    this.insert();
 };
 
 // increase target entropy
@@ -97,7 +96,6 @@ PassGen.prototype.more = function () {
     if ('localStorage' in window) {
         localStorage.setItem('spgen.target_entropy', this.target_entropy);
     }
-    this.insert();
 };
 
 // insert the generated passphrase into HTML block
