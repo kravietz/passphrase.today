@@ -35,11 +35,14 @@ will warn the user and refuse to work.
 ## Dictionary attacks
 
 As the passphrases generated with default parameters will be in most cases well over 20 characters long, brute-force attacks
-attempting to guess the passphrase character by character won't be feasible.
+attempting to guess the passphrase character by character won't be feasible. Take this passphrase for example:
 
-However, attacks trying all combinations of the words from the same dictionaries may be still quite effective &mdash; for
-example, for two-word passphrases selected from a 300'000 words long dictionary there will be 90 billions of combinations,
-which can be crackied... in a minute using [GPU](https://en.wikipedia.org/wiki/Graphics_processing_unit)-powered
+     niepoprzekłuwany niewybębniany
+
+However, attacks trying all combinations of the words **from the same dictionary as we use** may be still quite effective
+&mdash; for example, for two-word passphrases selected from a 300'000 words long dictionary there will be 90 billions
+of combinations, which can be cracked... in a minute. This can be easily achieved 
+using [GPU](https://en.wikipedia.org/wiki/Graphics_processing_unit)-powered
 crackers like [oclHashCat](http://hashcat.net/oclhashcat/) on a middle-class gaming computer:
 
 ```
@@ -63,12 +66,43 @@ Started: Tue Apr 07 23:21:19 2015
 Stopped: Tue Apr 07 23:21:46 2015
 ```
 In the above example a keyspace of 9e10 is searched at speed of 2213e6 hashes per second, which theoretically should
-take 40 seconds, but as they key is found after searching 50% of the keyspace it only takes 27 seconds.
+take 40 seconds, but as they key is found after searching roughly half of the keyspace it only takes 27 seconds.
 
-If the passphrase had 3 words, it would take 141 days to crack on the same machine, but as the Bitcoin revolution has taught
-us how to build massive GPU farms cheaply, this can be easily parallelized and reduced down to no time again. 
+If the passphrase was built using 3 words it would take 141 days to crack on the same machine, and if it was 4 words
+the time would increase to 116'000 years and so on. So, under the same parameters the time to crack would be the following:
 
-Because of this we need to render the dictionary attacks useless and the generator does this by adding  transformations.
-Currently there are two of them: injection of non-dictionary characters (digits, punctuation etc) and case toggling. They are
-applied to a random character of the passphrase and each of them will usually happen only once.
+<table>
+<tr><th>Words <th>Keyspace <th>Time
+<tr><td>2 <td>90e10 <td>40 sec
+<tr><td>3 <td>90e16 <td>141 days
+<tr><td>4 <td>90e21 <td>116'000 years
+</table>
 
+Unfortunately, the Bitcoin mining revolution has taught us
+how to build  GPU farms cheaply so hash cracking can be now easily parallelised, scaled horizontally
+reducing the cracking time to a reasonable period again. 
+
+In addition to that, the longer the passphrase, the more difficult it becomes to remember and type, thus
+cancelling their advantage over character based passwords. So relying on the number of words alone is perphaps not the
+best way forward.
+
+## Defense against dictionary attacks
+
+To render the dictionary attacks useless the generator applies **transformations** to the dictionary words.
+Currently there are two of them:
+
+* injection of non-dictionary characters (digits, punctuation etc)
+* case switching
+
+The transformations are applied to a random character of the passphrase and each of them will usually happen
+only once. Here's an example how transformations work:
+
+```
+narr4w seas Townsville
+narrow Seas Townsv)lle
+narr{w seas TownsviLle
+narr1w seas TownsviLle
+```
+
+These passphrases can no longer be cracked using dictionary combination attack or, more precisely, such an attack
+would be equivalent in complexity to a brute force attack.
