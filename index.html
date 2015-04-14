@@ -1,67 +1,23 @@
 <!DOCTYPE html>
 <html manifest="cache.manifest">
+
 <head lang="en">
+
     <meta charset="UTF-8">
     <title>Passphrase.Today</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Secure passphrase generator with multiple languages, entropy estimation and fully off-line calculations">
 
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="fonts/fonts.css">
-
     <style>
         html {
             display: none;
         }
-
-        #buttons {
-            padding: 10px;
-        }
-
-        #output-wrapper {
-            font-family: monospace;
-            font-weight: bold;
-            padding-top: 50px;
-            padding-bottom: 40px;
-            font-size: 120%;
-        }
-
-        #advanced-tab {
-            padding-top: 20px;
-        }
-
-        #footer {
-            padding-top: 80px;
-        }
-
-        h1 {
-            font-family: "Essays 1743", Palatino, "Palatino Linotype", "Book Antiqua", Georgia, "Times New Roman", serif;
-        }
-
-        .glyphicon.spinning {
-            animation: spin 1s infinite linear;
-            -webkit-animation: spin2 1s infinite linear;
-        }
-
-        @keyframes spin {
-            from {
-                transform: scale(1) rotate(0deg);
-            }
-            to {
-                transform: scale(1) rotate(360deg);
-            }
-        }
-
-        @-webkit-keyframes spin2 {
-            from {
-                -webkit-transform: rotate(0deg);
-            }
-            to {
-                -webkit-transform: rotate(360deg);
-            }
-        }
     </style>
+
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="fonts/fonts.css">
+    <link rel="stylesheet" href="styles.css">
 
     <!--SCRIPT-->
     <script src="sjcl/sjcl.js"></script>

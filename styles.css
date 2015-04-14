@@ -1,0 +1,46 @@
+#buttons {
+    padding: 10px;
+}
+
+#output-wrapper {
+    font-family: monospace;
+    font-weight: bold;
+    padding-top: 50px;
+    padding-bottom: 40px;
+    font-size: 120%;
+}
+
+#advanced-tab {
+    padding-top: 20px;
+}
+
+#footer {
+    padding-top: 80px;
+}
+
+h1.logo {
+    font-family: "Essays 1743", Palatino, "Palatino Linotype", "Book Antiqua", Georgia, "Times New Roman", serif;
+}
+
+.glyphicon.spinning {
+    animation: spin 1s infinite linear;
+    -webkit-animation: spin2 1s infinite linear;
+}
+
+@keyframes spin {
+    from {
+        transform: scale(1) rotate(0deg);
+    }
+    to {
+        transform: scale(1) rotate(360deg);
+    }
+}
+
+@-webkit-keyframes spin2 {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
