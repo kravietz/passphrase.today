@@ -16,10 +16,11 @@
  */
 function NistRandom() {
     this.method = this.ModMethod;
+
 }
 
 NistRandom.prototype.getRange = function (r) {
-    return this.method(r)
+    return this.method(r);
 };
 
 // B.5.1.1 The Simple Discard Method
