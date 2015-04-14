@@ -67,7 +67,6 @@ java -jar compiler.jar \
     --js {app,dict,entropy,passphrase,random,titles}.js \
     --third_party \
     --compilation_level SIMPLE \
-    --formatting PRETTY_PRINT \
     --charset UTF8 \
     >output/main.js
 
