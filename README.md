@@ -37,7 +37,7 @@ will warn the user and refuse to work.
 There's just one configurable parameter in this generator: the target information entropy, which is the most
 commonly used to illustrate strength of passwords. If your entropy threshold is set to 35 bits the application
 will randomly generate candidate passphrases until it finds one that is measured above this level. You can increase
-or descrease the threshold to get stronger or weaker passphrases.
+or decrease the threshold to get stronger or weaker passphrases.
 
 The application uses three methods for candidate passphrase estimation:
 
@@ -56,6 +56,22 @@ typical for natural language. Entropy is calculated according to the "full" Shan
 calculated for probability of each character in the dictionary, and then they are summed. This method reflects
 the resistance to  brute-force guessing all character combinations and tends to produce very high values.
 
+Let's take one generated passphrase as a sample:
+
+    wood alcohol on the table
+    
+It looks funny, but it's composed from only **two** tokens actually: the dictionary also has
+phrases (`wood alcohol` and `on the table` in this case). Applying the entropy
+estimation algorithms will give the following results>
+
+<table>
+<tr><th>Method <th>Entropy <th>Notes
+<tr><td>Shannon word <td>36 <td>2 tokens
+<tr><td>NIST <td>41 <td>25 characters
+<tr><td>Shannon char <td>115 <td>25 characters
+</table>
+
+This passphrase passes the minimum 35 bits of entropy threshold and is thus presented to the user as a candidate.
 
 ## Brute-force guessing
 
