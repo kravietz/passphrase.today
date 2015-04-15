@@ -43,10 +43,18 @@
                 randomness as possible in local environment.
             </p>
             <p>
-                The rule of thumb is that none of the scatter plots should show any
+                The rule of thumb is that none of the <strong>scatter plots</strong> should show any
                 systematic patterns, the points should be pretty much evenly distributed.
-                In histograms the height of the bars on all width should be similar, with
-                no continuous minimums or maximums.
+                In <strong>histograms</strong> the height of the bars on all width should be similar, with
+                no significant or continuous minimums or maximums.
+            </p>
+            <p>
+                The <tt>Math.random</tt> pictures are only provided for reference as this
+                generator does <strong>not</strong> use this method for generating random
+                numbers (we only use SJCL). However, chances are that if you're using relatively
+                new browser, the output from <tt>Math.random</tt> will be quite similar
+                to the one from SJCL as browser vendors have improved the generators a lot
+                over time!
             </p>
         </div>
     </div>
