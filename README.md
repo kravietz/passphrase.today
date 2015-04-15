@@ -32,7 +32,36 @@ The application does not use the standard `Math.random()` function but relies on
 and feed it from the cryptographic API offered by the browser. If this can't be done in secure manner, the generator
 will warn the user and refuse to work.
 
-## Dictionary attacks
+## Passphrase strength
+
+There's just one configurable parameter in this generator: the target information entropy, which is the most
+commonly used to illustrate strength of passwords. If your entropy threshold is set to 35 bits the application
+will randomly generate candidate passphrases until it finds one that is measured above this level. You can increase
+or descrease the threshold to get stronger or weaker passphrases.
+
+The application uses three methods for candidate passphrase estimation:
+
+* **Shannon entropy over words.** The passphrase is treated as a string of whole words randomly chosen from the dictionary
+and the entropy is equal to `math.log2(len(dictionary))`, so for an English dictionary of around 250'000 words each of them
+will contribute around 17 bits of entropy. This method reflects the resistance to attacks where all combinations of the
+words in the original dictionary are tried, mimicking how this generator works, and tends to produce the lowest number &mdash;
+it's also the most conservative of the estimates.
+* **NIST entropy.** In [SP 800-63](http://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-63-2.pdf) the NIST
+has proposed an algorithm that is based on actual password strength research and takes into account the fact that
+if natural language words are used to generate passwords the entropy quickly decreases with each  character. Because
+our passphrases are quite long, it will still give high result, usually higher than the Shannon word entropy.
+* **Shannon entropy over characters.** We treat the passphrase as a string of characters chosen from the dictionary, but not
+quite randomly: it's because the characters in the words in the dictionary have very different and non-uniform frequencies,
+typical for natural language. Entropy is calculated according to the "full" Shannon formula where `-p * math.log2(p)` is 
+calculated for probability of each character in the dictionary, and then they are summed. This method reflects
+the resistance to  brute-force guessing all character combinations and tends to produce very high values.
+
+
+## Brute-force guessing
+
+
+
+## Dictionary combination attacks
 
 As the passphrases generated with default parameters will be in most cases well over 20 characters long, brute-force attacks
 attempting to guess the passphrase character by character won't be feasible. Take this passphrase for example:
