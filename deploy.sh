@@ -46,38 +46,44 @@ for f in $FONTS; do
     fi
 done
 
-if [ -d output ]; then
-    rm -rf output/*
+if [ -z "$1" ]; then
+    output="output"
 else
-    mkdir output
+    output="$1"
 fi
 
-mkdir -p output/{dict,fonts}
+if [ -d "$output" ]; then
+    rm "$output/"*
+else
+    mkdir -p "$output"
+fi
 
-ln sjcl/sjcl.js output/
-ln plot.js output/
-ln robots.txt cache.manifest output/
-ln fonts/* output/fonts/
+mkdir -p $output/{dict,fonts}
 
-cp -a bootstrap output/
+ln sjcl/sjcl.js $output/
+ln plot.js $output/
+ln robots.txt cache.manifest $output/
+ln fonts/* $output/fonts/
 
-ln dict/*.js output/dict/
+cp -a bootstrap $output/
+
+ln dict/*.js $output/dict/
 
 java -jar compiler.jar \
     --js {app,dict,entropy,passphrase,random,titles}.js \
     --third_party \
     --compilation_level SIMPLE \
     --charset UTF8 \
-    >output/main.js
+    > $output/main.js
 
 i="index.html"
-awk -f script.awk $i | java -jar htmlcompressor-1.5.3.jar --compress-js --compress-css >output/$i
+awk -f script.awk $i | java -jar htmlcompressor-1.5.3.jar --compress-js --compress-css > $output/$i
 i="random.html"
-java -jar htmlcompressor-1.5.3.jar --compress-js --compress-css $i >output/$i
+java -jar htmlcompressor-1.5.3.jar --compress-js --compress-css $i > $output/$i
 i='styles.css'
-java -jar htmlcompressor-1.5.3.jar --compress-css $i >output/$i
+java -jar htmlcompressor-1.5.3.jar --compress-css $i > $output/$i
 
-find output | egrep '\.(html|map|svg|eot|woff|ttf|css|js|manifest)$' | xargs gzip -9kf 
+find $output/ | egrep '\.(html|map|svg|eot|woff|ttf|css|js|manifest)$' | xargs gzip -9kf
 #cp logo.png apple-touch-icon.png
 #cp apple-touch-icon.png touch-icon-ipad.png
 #cp apple-touch-icon.png touch-icon-iphone-retina.png
@@ -86,6 +92,6 @@ find output | egrep '\.(html|map|svg|eot|woff|ttf|css|js|manifest)$' | xargs gzi
 #mogrify -geometry 120x120 touch-icon-iphone-retina.png
 #mogrify -geometry 152x152 touch-icon-ipad-retina.png
 
-if [ "$1" = "ssh" ]; then
+if [ "$output" = "ssh" ]; then
     rsync --compress-level=9 -avz --delete output/ kautsky:passphrase/
 fi
