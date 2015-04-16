@@ -171,7 +171,7 @@ the time would increase to 116'000 years and so on. So, under the same parameter
 </table>
 
 Unfortunately, the [Bitcoin hash rate surge](https://blockchain.info/charts/hash-rate?timespan=all&showDataPoints=false&daysAverageString=1&show_header=true&scale=0&address=)
-has taught us how to build GPU or ASIC farms cheaply so even that e.5e17 hash rate doesn't apply completely
+has taught us how to build GPU or ASIC farms cheaply so even that 3.5e17 hash rate doesn't apply completely
 unreasonably when applied to password cracking.
 
 In addition, the longer the passphrase, the more difficult it becomes to remember and type, thus
