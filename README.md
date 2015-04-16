@@ -87,17 +87,26 @@ passwords (which is around 3.5e17 in Q2 2015). This gives around 1e10 years to s
 17 seconds if the password was 16 characters long).
 
 The actual alphabets are much larger than the 26 characters from the example: from 62 unique characters in Russian to 71 in English.
-This **increases** the keyspace to 1e21.
+This obviously **increases** the keyspace (to 1e21).
 
 The exhaustive keyspace search model assumes characters selected randomly from the alphabet, but with natural
 language dictionary it's not random at all: not only unique characters occur at different frequencies, but also follow
-certain statistical patterns on how one characters tend to follow others. This allows to implement Markov attacks
-against natural language passwords (see 
+certain statistical patterns on how one characters tend to follow others. This allows to implement
+**much faster Markov attacks** (see 
 [John the Ripper](http://openwall.info/wiki/john/markov)
-and [hashcat](http://hashcat.net/wiki/doku.php?id=statsprocessor)). 
+and [HashCat](http://hashcat.net/wiki/doku.php?id=statsprocessor)). 
 
-Markov attacks will try the more frequent characters and
-character combinations first. Sample of strings tried by Markov algorithm (hashcat
+A naïve brute-force attack would try the following combinations, spending a lot of time on sequences
+that never appear in natural language (like `aaaa`):
+
+```
+aaaaa
+baaaa
+caaaa
+...
+```
+
+Markov attacks will try the more frequent character sequences first. Sample of strings tried by Markov algorithm (HashCat
 implementation):
 
 ```
@@ -107,19 +116,11 @@ seller
 ...
 ```
 
-While a naïve brute-force attack would try the following combinations, spending a lot of time on combinations
-of characters that never appear in natural language (like `aaaa`):
+So even though the keyspace remains the same, chances are they will hit the right combination much faster: in my testing on
+6 character passwords Markov cracking tried all natural-language-looking strings in just 0.24% of the keyspace
+(3e8 instead of 3e11).
 
-```
-aaaaa
-baaaa
-caaaa
-...
-```
-
-, so chances are they will hit the right combination much faster: in my testing on
-6 character passwords Markov cracking tried all "natural-language-looking" strings in just 0.24% of the keyspace
-(3e8 instead of 3e11). But even with this reduction it's still in unreachable regions.
+But even with this reduction it's still in unreachable regions for the full length passphrase.
 
 ## Dictionary combination attacks
 
@@ -130,8 +131,8 @@ attempting to guess the passphrase character by character won't be feasible. Tak
 
 However, attacks trying all combinations of the words **from the same dictionary as we use** may be still quite effective
 &mdash; for example, for two-word passphrases selected from a 300'000 words long dictionary there will be 90 billions
-of combinations, which can be cracked... in a minute. This can be easily achieved 
-using [GPU](https://en.wikipedia.org/wiki/Graphics_processing_unit)-powered
+of combinations (9e10), which can be searched... in a minute using a
+[GPU](https://en.wikipedia.org/wiki/Graphics_processing_unit)-powered
 crackers like [oclHashCat](http://hashcat.net/oclhashcat/) on a middle-class gaming computer:
 
 ```
@@ -161,18 +162,20 @@ If the passphrase was built using 3 words it would take 141 days to crack on the
 the time would increase to 116'000 years and so on. So, under the same parameters the time to crack would be the following:
 
 <table>
-<tr><th>Words <th>Keyspace <th>Time
-<tr><td>2 <td>90e10 <td>40 sec
-<tr><td>3 <td>90e16 <td>141 days
-<tr><td>4 <td>90e21 <td>116'000 years
+<tr><th>Words <th>Keyspace <th>Time at 2 GH/s <th>Time at 3.5e17 H/s
+<tr><td>2 <td>9.00e+10 <td>40 sec <td>0
+<tr><td>3 <td>2.70e+16 <td>141 days <td>0
+<tr><td>4 <td>8.10e+21 <td>116k years <td>6 sec
+<tr><td>5 <td>2.43e+27 <td>3e10 years <td>220 years
+<tr><td>6 <td>7.29e+32 <td>1e16 years <td>6e7 years
 </table>
 
-Unfortunately, the Bitcoin mining revolution has taught us
-how to build  GPU farms cheaply so hash cracking can be now easily parallelised, scaled horizontally
-reducing the cracking time to a reasonable period again. 
+Unfortunately, the [Bitcoin hash rate surge](https://blockchain.info/charts/hash-rate?timespan=all&showDataPoints=false&daysAverageString=1&show_header=true&scale=0&address=)
+has taught us how to build GPU or ASIC farms cheaply so even that e.5e17 hash rate doesn't apply completely
+unreasonably when applied to password cracking.
 
-In addition to that, the longer the passphrase, the more difficult it becomes to remember and type, thus
-cancelling their advantage over character based passwords. So relying on the number of words alone is perphaps not the
+In addition, the longer the passphrase, the more difficult it becomes to remember and type, thus
+cancelling their advantage over character based passwords. So relying on the number of words alone perhaps is not the
 best way forward.
 
 ## Defense against dictionary attacks
