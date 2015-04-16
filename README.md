@@ -1,20 +1,22 @@
 # Passphrase.Today
 
-This application generates random passphrases in secure manner. Features:
+This application generates random passphrases of configurable strength:
 
 * Randomly choose words from a large dictionary
-* JavaScript based, fully client-side generation. Includes off-line version, so after running once it wil work without network access
-* Uses [SJCL](https://github.com/bitwiseshiftleft/sjcl) library for random numbers
-* English, Polish and Russian dictionaries currently built-in
-* Full Unicode support
-* Passphrase is transformed to thwart dictionary attacks
+* English, Polish and Russian dictionaries currently built-in, easy to add new
+* Client-side only generation with [HTML5 off-line](http://www.html5rocks.com/en/tutorials/appcache/beginner/) support
+* [SJCL](https://github.com/bitwiseshiftleft/sjcl) for strong random numbers in any browser
+* Additional transformations to thwart dictionary attacks
+
+There's an on-line prototype at [Passphrase.Today](https://passphrase.today/) that also works off-line. Android
+application is planned to be issued soon.
 
 ## How does it work?
 
 The theory of operation is similar to a well-known [Diceware](https://en.wikipedia.org/wiki/Diceware) scheme, where
 six words are selected randomly from a dictionary of almost 8000 words using a pair of traditional dice. This application
-works on the same principle, it just uses much larger dictionaries (140-300k words) and words are selected using
-a software random number generator.
+works on the same principle, it just uses much larger dictionaries (140-300k words), words are selected using
+a software random number generator and additional transformations are applied.
 
 Passphrase length is determined by the target entropy, which by default is set to 35 bits &mdash; this usually
 produces passphrases of around 2-3 words. You can change the target entropy to get shorter or longer passphrases.
@@ -34,8 +36,8 @@ will warn the user and refuse to work.
 
 ## Passphrase strength
 
-There's just one configurable parameter in this generator: the target information entropy, which is the most
-commonly used to illustrate strength of passwords. If your entropy threshold is set to 35 bits the application
+There's just one configurable parameter in this generator: **the target information entropy,** which is the metric most
+commonly used to describe strength of passwords. If your entropy threshold is set to 35 bits the application
 will randomly generate candidate passphrases until it finds one that is measured above this level. You can increase
 or decrease the threshold to get stronger or weaker passphrases.
 
@@ -60,22 +62,64 @@ Let's take one generated passphrase as a sample:
 
     wood alcohol on the table
     
-It looks funny, but it's composed from only **two** tokens actually: the dictionary also has
+It looks funny, but it's composed from only **two** tokens actually: the dictionary also contains
 phrases (`wood alcohol` and `on the table` in this case). Applying the entropy
 estimation algorithms will give the following results>
 
 <table>
 <tr><th>Method <th>Entropy <th>Notes
 <tr><td>Shannon word <td>36 <td>2 tokens
-<tr><td>NIST <td>41 <td>25 characters
-<tr><td>Shannon char <td>115 <td>25 characters
+<tr><td>NIST <td>41 <td>25 characters, decreasing entropy per char
+<tr><td>Shannon char <td>115 <td>25 chars but different formula
 </table>
 
-This passphrase passes the minimum 35 bits of entropy threshold and is thus presented to the user as a candidate.
+This passphrase passes the minimum 35 bits of entropy threshold and is thus presented to the user as a candidate. To make
+things simpler, *this* example doesn't use the transformations described below.
 
 ## Brute-force guessing
 
+Treating the passphrase as a string of characters and applying a brute-force guessing attack won't be in most cases
+feasible because the passphrases tend to be longer than typical passwords. The sample passphrase `wood alcohol...` passphrase
+is 25 characters long and let's assume for simplicity it's built from an alphabet of only 26 characters (`a-z` and space).
+This gives a keyspace
+of 2e35. Then, let's assume we can employ the [current Bitcoin hash rate](https://blockchain.info/charts/hash-rate) to crack
+passwords (which is around 3.5e17 in Q2 2015). This gives around 1e10 years to search the keyspace (while it would take only
+17 seconds if the password was 16 characters long).
 
+The actual alphabets are much larger than the 26 characters from the example: from 62 unique characters in Russian to 71 in English.
+This **increases** the keyspace to 1e21.
+
+The exhaustive keyspace search model assumes characters selected randomly from the alphabet, but with natural
+language dictionary it's not random at all: not only unique characters occur at different frequencies, but also follow
+certain statistical patterns on how one characters tend to follow others. This allows to implement Markov attacks
+against natural language passwords (see 
+[John the Ripper](http://openwall.info/wiki/john/markov)
+and [hashcat](http://hashcat.net/wiki/doku.php?id=statsprocessor)). 
+
+Markov attacks will try the more frequent characters and
+character combinations first. Sample of strings tried by Markov algorithm (hashcat
+implementation):
+
+```
+serera
+seaner
+seller
+...
+```
+
+While a naïve brute-force attack would try the following combinations, spending a lot of time on combinations
+of characters that never appear in natural language (like `aaaa`):
+
+```
+aaaaa
+baaaa
+caaaa
+...
+```
+
+, so chances are they will hit the right combination much faster: in my testing on
+6 character passwords Markov cracking tried all "natural-language-looking" strings in just 0.24% of the keyspace
+(3e8 instead of 3e11). But even with this reduction it's still in unreachable regions.
 
 ## Dictionary combination attacks
 
@@ -143,10 +187,10 @@ The transformations are applied to a random character of the passphrase and each
 only once. Here's an example how transformations work:
 
 ```
-narr4w seas Townsville
-narrow Seas Townsv)lle
-narr{w seas TownsviLle
-narr1w seas TownsviLle
+wOod5alcohol on the table
+wood alc[hOl on the table
+Wood alcohol on %he table
+wood a9cohol on the table
 ```
 
 These passphrases can no longer be cracked using dictionary combination attack or, more precisely, such an attack
