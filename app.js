@@ -13,30 +13,25 @@ function toggleAdvanced() {
     var e = document.getElementById('advanced');
     e.hidden = e.hidden ? false : true;
 }
-document.getElementById('toggle-advanced-element').addEventListener('click', toggleAdvanced);
 
 function outputNewPassphrase() {
     window['pass'] = window['pp'].gen();
     window['pp'].insert(window['pp'].transform(window['pass']));
 }
-document.getElementById('new-pass-element').addEventListener('click', outputNewPassphrase);
 
 function outputNewTRansform() {
     window['pp'].insert(window['pp'].transform(window['pass']));
 }
-document.getElementById('new-trans-element').addEventListener('click', outputNewTRansform);
 
 function lessEntropy() {
     window['pp']['less']();
     window['ppNewPass']();
 }
-document.getElementById('less-entropy-element').addEventListener('click', lessEntropy);
 
 function moreEntropy() {
     window['pp']['more']();
     window['ppNewPass']();
 }
-document.getElementById('more-entropy-element').addEventListener('click', moreEntropy);
 
 function start() {
     // framebuster
@@ -76,6 +71,12 @@ function start() {
 
     // add titles to the advanced tab
     addTitles();
+
+    document.getElementById('toggle-advanced-element').addEventListener('click', toggleAdvanced);
+    document.getElementById('new-pass-element').addEventListener('click', outputNewPassphrase);
+    document.getElementById('new-trans-element').addEventListener('click', outputNewTRansform);
+    document.getElementById('less-entropy-element').addEventListener('click', lessEntropy);
+    document.getElementById('more-entropy-element').addEventListener('click', moreEntropy);
 }
 
 // actually start the application
