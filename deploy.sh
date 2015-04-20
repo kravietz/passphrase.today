@@ -66,6 +66,7 @@ mkdir -p $output/{dict,fonts}
 ln sjcl/sjcl.js $output/
 ln plot.js $output/
 ln robots.txt cache.manifest $output/
+echo "# build $(date|md5)" >>$output/cache.manifest
 ln fonts/* $output/fonts/
 ln favicon.ico $output/
 
@@ -77,13 +78,15 @@ java -jar compiler.jar \
     --js {app,dict,entropy,passphrase,random,titles}.js \
     --third_party \
     --compilation_level SIMPLE \
+    --formatting PRETTY_PRINT \
     --charset UTF8 \
     > $output/main.js
 
 i="index.html"
 awk -f script.awk $i | java -jar htmlcompressor-1.5.3.jar --compress-js --compress-css > $output/$i
 i="random.html"
-java -jar htmlcompressor-1.5.3.jar --compress-js --compress-css $i > $output/$i
+#java -jar htmlcompressor-1.5.3.jar --compress-js --compress-css $i > $output/$i
+ln $i $output/$i
 i='styles.css'
 java -jar htmlcompressor-1.5.3.jar --compress-css $i > $output/$i
 
