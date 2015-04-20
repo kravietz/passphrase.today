@@ -15,8 +15,8 @@
     <link rel="stylesheet" href="styles.css">
 
     <link rel="icon" href="favicon.ico">
-    <link rel="apple-touch-icon" sizes="60x60"   href="apple-touch-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="76x76"   href="apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="apple-touch-icon-76x76.png">
     <link rel="apple-touch-icon" sizes="120x120" href="apple-touch-icon-120x120.png">
     <link rel="apple-touch-icon" sizes="152x152" href="apple-touch-icon-152x152.png">
 </head>
@@ -37,6 +37,7 @@
                 This page shows dynamically generated graphical representation of the
                 pseudo-random number generator in your browser.
             </p>
+
             <p>
                 <tt>Math.random</tt> is the
                 default generator built into all browsers that was not designed with
@@ -44,12 +45,14 @@
                 is a JavaScript cryptography library that intends to provide as much
                 randomness as possible in local environment.
             </p>
+
             <p>
                 The rule of thumb is that none of the <strong>scatter plots</strong> should show any
                 systematic patterns, the points should be pretty much evenly distributed.
                 In <strong>histograms</strong> the height of the bars on all width should be similar, with
                 no significant or continuous minimums or maximums.
             </p>
+
             <p>
                 The <tt>Math.random</tt> pictures are only provided for reference as this
                 generator does <strong>not</strong> use this method for generating random
@@ -64,7 +67,9 @@
     <div class="row">
 
         <div class="col-md-12 text-center">
-            <button type="button" class="btn btn-primary btn-lg" id="plot-button" title="This may take a while on slower devices...">Run!</button>
+            <button type="button" class="btn btn-primary btn-lg" id="plot-button"
+                    title="This may take a while on slower devices...">Run!
+            </button>
         </div>
     </div>
 
