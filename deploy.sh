@@ -90,7 +90,7 @@ java -jar compiler.jar \
 java -jar compiler.jar \
     --js {random,plot}.js \
     --third_party \
-    --compilation_level SIMPLE \
+    --compilation_level ADVANCED \
     --charset UTF8 \
     --create_source_map ${output}/plot.js.map \
     > ${output}/plot.js
@@ -114,12 +114,12 @@ inkscape --without-gui --export-png=${logo} --export-width=64 --export-height=64
 convert ${logo} ${output}/favicon.ico
 for s in 60 76 120 152; do
     size="${s}x${s}"
-    convert -geometry ${size} ${logo} ${output}/apple-touch-icon-${size}.png
+    convert -comment Passphrase.Today -geometry ${size} ${logo} ${output}/apple-touch-icon-${size}.png
 done
 rm ${logo}
 
 chmod -R a+r ${output}
 
 if [ "$1" = "ssh" ]; then
-    rsync --compress-level=9 -avz --delete output/ kautsky:passphrase/
+    rsync --compress-level=9 --checksum -avz --delete output/ kautsky:passphrase/
 fi
