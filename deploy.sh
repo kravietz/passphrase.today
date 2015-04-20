@@ -68,7 +68,7 @@ ln robots.txt $output/
 ln fonts/* $output/fonts/
 ln favicon.ico $output/
 
-cp cache.manifest >$output/
+cp cache.manifest $output/
 echo "# build $(date|md5)" >>$output/cache.manifest
 
 cp -a bootstrap $output/
