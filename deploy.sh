@@ -40,7 +40,7 @@ fi
 
 FONTS="Essays1743-bold-italic.eot Essays1743-bold-italic.ttf Essays1743-bold-italic.woff Essays1743-bold.eot Essays1743-bold.ttf Essays1743-bold.woff Essays1743-italic.eot Essays1743-italic.ttf Essays1743-italic.woff Essays1743.eot Essays1743.ttf Essays1743.woff"
 
-for f in $FONTS; do
+for f in ${FONTS}; do
     if [ ! -f fonts/$f ]; then
         curl --compress -o "fonts/$f" "http://diveintohtml5.info/f/$f"
     fi
@@ -61,19 +61,19 @@ else
     mkdir -p "$output"
 fi
 
-mkdir -p $output/{dict,fonts}
+mkdir -p ${output}/{dict,fonts}
 
-ln sjcl/sjcl.js $output/
-ln robots.txt $output/
-ln fonts/* $output/fonts/
-ln favicon.ico $output/
+ln sjcl/sjcl.js ${output}/
+ln robots.txt ${output}/
+ln fonts/* ${output}/fonts/
+ln favicon.ico ${output}/
 
-cp cache.manifest $output/
-echo "# build $(date|md5)" >>$output/cache.manifest
+cp cache.manifest ${output}/
+echo "# build $(date|md5)" >>${output}/cache.manifest
 
-cp -a bootstrap $output/
+cp -a bootstrap ${output}/
 
-ln dict/*.js $output/dict/
+ln dict/*.js ${output}/dict/
 
 # when changing names, update cache.manifest
 java -jar compiler.jar \
@@ -82,32 +82,35 @@ java -jar compiler.jar \
     --compilation_level SIMPLE \
     --formatting PRETTY_PRINT \
     --charset UTF8 \
-    --create_source_map $output/main.js.map \
-    > $output/main.js
+    --create_source_map ${output}/main.js.map \
+    > ${output}/main.js
 java -jar compiler.jar \
     --js {random,plot}.js \
     --third_party \
     --compilation_level SIMPLE \
     --formatting PRETTY_PRINT \
     --charset UTF8 \
-    --create_source_map $output/plot.js.map \
-    > $output/plot.js
+    --create_source_map ${output}/plot.js.map \
+    > ${output}/plot.js
 
 i="index.html"
-awk -f script.awk $i | java -jar htmlcompressor-1.5.3.jar --compress-js --compress-css > $output/$i
+awk -f script.awk ${i} | java -jar htmlcompressor-1.5.3.jar --compress-js --compress-css > ${output}/${i}
 i="plot.html"
-java -jar htmlcompressor-1.5.3.jar --compress-js --compress-css $i > $output/$i
+java -jar htmlcompressor-1.5.3.jar --compress-js --compress-css ${i}> $output/$i
 i='styles.css'
-java -jar htmlcompressor-1.5.3.jar --compress-css $i > $output/$i
+java -jar htmlcompressor-1.5.3.jar --compress-css ${i} > ${output}/${i}
 
-find $output/ | egrep '\.(html|map|svg|eot|woff|woff2|ttf|css|js|manifest)$' | xargs gzip -9kf
-#cp logo.png apple-touch-icon.png
-#cp apple-touch-icon.png touch-icon-ipad.png
-#cp apple-touch-icon.png touch-icon-iphone-retina.png
-#cp apple-touch-icon.png touch-icon-ipad-retina.png
-#mogrify -geometry 76x76 touch-icon-ipad.png
-#mogrify -geometry 120x120 touch-icon-iphone-retina.png
-#mogrify -geometry 152x152 touch-icon-ipad-retina.png
+find ${output}/ | egrep '\.(html|map|svg|eot|woff|woff2|ttf|css|js|manifest)$' | xargs gzip -9kf
+
+# generate favicon and Apple touch images
+# if this is changed, need to update HTML too
+# it's Inkscape weirdness that requires full path for i/o files
+inkscape --without-gui --export-png=$(pwd)/logo.png --export-width=64 --export-height=64 --file=$(pwd)/logo.svg
+convert logo.png ${output}/favicon.ico
+for s in 60 76 120 152; do
+    size="${s}x${x}"
+    convert -geometry ${size} logo.png ${output}/apple-touch-icon-${size}.png
+done
 
 if [ "$1" = "ssh" ]; then
     rsync --compress-level=9 -avz --delete output/ kautsky:passphrase/
