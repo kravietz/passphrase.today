@@ -36,7 +36,7 @@ function moreEntropy() {
     window['pp']['more']();
     window['ppNewPass']();
 }
-document.getElementById('more-etropy-element').addEventListener('click', moreEntropy);
+document.getElementById('more-entropy-element').addEventListener('click', moreEntropy);
 
 function start() {
     // framebuster
