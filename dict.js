@@ -6,14 +6,12 @@
 
 /** @const */ var /** string */ DEFAULT_LANG = 'english';
 
-// choose a dictionary for specified language and display the first passphrase
 /**
- * Load new dictionary for specified language.
+ * Validate if input language is a supported one
  * @param {string} lang
  */
-function loadDictionary(/** string */ lang) {
-    console.log('dictionary change=', lang);
-    // validate
+function validDictionary(/** string */ lang) {
+    // manually managed list of supported dictionaries
     switch (lang) {
         case 'english':
             break;
@@ -24,22 +22,41 @@ function loadDictionary(/** string */ lang) {
         default:
             lang = DEFAULT_LANG;
     }
+    return lang;
+}
+
+// choose a dictionary for specified language and display the first passphrase
+/**
+ * Load new dictionary for specified language.
+ * @param {string} lang
+ */
+function loadDictionary(/** string */ lang) {
+
+    // validate requested language
+    lang = validDictionary(lang);
+
+    console.log('initialising dictionary, lang=', lang);
+
     var dict_path = 'dict/' + lang + '.js';
 
     // delete any previously injected tags
+    // just in case, there should be none
     var e = document.getElementById('dictionary');
     if (e) {
         e.remove();
     }
+
     // prepare script tag to load new dictionary
     var script = document.createElement('script');
     var head = document.head || document.getElementsByTagName('head')[0] || document.documentElement;
     script.src = dict_path;
     script.id = 'dictionary';
     var done = false;
+
+    // hook function that will be called when dictionary is loaded
     script.onload = script.onreadystatechange = function () {
-        if (!done && (!document.readyState ||
-            document.readyState == "loaded" || document.readyState == "complete")) {
+        if (!done && (!document.readyState || document.readyState == "loaded" || document.readyState == "complete" || document.readyState == "interactive" )) {
+
             done = true;
 
             // export for the inline HTML calls
