@@ -112,6 +112,8 @@ for s in 60 76 120 152; do
     convert -geometry ${size} logo.png ${output}/apple-touch-icon-${size}.png
 done
 
+chmod a+r ${output} -R
+
 if [ "$1" = "ssh" ]; then
     rsync --compress-level=9 -avz --delete output/ kautsky:passphrase/
 fi
