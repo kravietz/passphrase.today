@@ -64,11 +64,12 @@ fi
 mkdir -p $output/{dict,fonts}
 
 ln sjcl/sjcl.js $output/
-ln plot.js $output/
-ln robots.txt cache.manifest $output/
-echo "# build $(date|md5)" >>$output/cache.manifest
+ln robots.txt $output/
 ln fonts/* $output/fonts/
 ln favicon.ico $output/
+
+cp cache.manifest >$output/
+echo "# build $(date|md5)" >>$output/cache.manifest
 
 cp -a bootstrap $output/
 
@@ -80,6 +81,7 @@ java -jar compiler.jar \
     --compilation_level SIMPLE \
     --formatting PRETTY_PRINT \
     --charset UTF8 \
+    --create_source_map $output/main.js.map \
     > $output/main.js
 
 java -jar compiler.jar \
@@ -88,11 +90,12 @@ java -jar compiler.jar \
     --compilation_level SIMPLE \
     --formatting PRETTY_PRINT \
     --charset UTF8 \
+    --create_source_map $output/plot.js.map \
     > $output/plot.js
 
 i="index.html"
 awk -f script.awk $i | java -jar htmlcompressor-1.5.3.jar --compress-js --compress-css > $output/$i
-i="random.html"
+i="plot.html"
 #java -jar htmlcompressor-1.5.3.jar --compress-js --compress-css $i > $output/$i
 ln $i $output/$i
 i='styles.css'
