@@ -23,10 +23,18 @@ function go() {
 }
 
 function runPlots() {
+    var e = document.createElement('span');
+    e.setAttribute("class", "glyphicon glyphicon-refresh spinning");
+    e.setAttribute('aria-hidden', 'true');
+    document.getElementById('plot-button').textContent = "";
+    document.getElementById('plot-button').appendChild(e);
+
     histogram('sjcl-hist', 'sjcl', 'sjcl-hist-n');
     histogram('math-hist', 'math', 'math-hist-n');
     plot('sjcl-plot', 'sjcl', 'sjcl-plot-n');
     plot('math-plot', 'math', 'math-plot-n');
+
+    document.getElementById('plot-button').textContent = "Run!";
 }
 
 /**
