@@ -84,7 +84,7 @@ java -jar htmlcompressor-1.5.3.jar --compress-js --compress-css $i > $output/$i
 i='styles.css'
 java -jar htmlcompressor-1.5.3.jar --compress-css $i > $output/$i
 
-find $output/ | egrep '\.(html|map|svg|eot|woff|ttf|css|js|manifest)$' | xargs gzip -9kf
+find $output/ | egrep '\.(html|map|svg|eot|woff|woff2|ttf|css|js|manifest)$' | xargs gzip -9kf
 #cp logo.png apple-touch-icon.png
 #cp apple-touch-icon.png touch-icon-ipad.png
 #cp apple-touch-icon.png touch-icon-iphone-retina.png
