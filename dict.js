@@ -61,7 +61,7 @@ function loadDictionary(/** string */ lang) {
 
             // export for the inline HTML calls
             window['pp'] = new PassGen(dictionary, 'output');
-            window['ppNewPass']();
+            outputNewPassphrase();
 
             // clean up
             script.onload = script.onreadystatechange = null;
