@@ -82,6 +82,14 @@ java -jar compiler.jar \
     --charset UTF8 \
     > $output/main.js
 
+java -jar compiler.jar \
+    --js {random,plot}.js \
+    --third_party \
+    --compilation_level SIMPLE \
+    --formatting PRETTY_PRINT \
+    --charset UTF8 \
+    > $output/plot.js
+
 i="index.html"
 awk -f script.awk $i | java -jar htmlcompressor-1.5.3.jar --compress-js --compress-css > $output/$i
 i="random.html"
