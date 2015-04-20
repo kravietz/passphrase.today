@@ -69,7 +69,6 @@ mkdir -p ${output}/{dict,fonts}
 cp sjcl/sjcl.js ${output}/
 cp robots.txt ${output}/
 cp fonts/* ${output}/fonts/
-cp favicon.ico ${output}/
 
 cp cache.manifest ${output}/
 echo "# build $(date|md5)" >>${output}/cache.manifest
@@ -110,12 +109,14 @@ find ${output}/ | egrep '\.(html|map|svg|eot|woff|woff2|ttf|css|js|manifest)$' |
 # generate favicon and Apple touch images
 # if this is changed, need to update HTML too
 # it's Inkscape weirdness that requires full path for i/o files
-inkscape --without-gui --export-png=$(pwd)/logo.png --export-width=64 --export-height=64 --file=$(pwd)/logo.svg
-convert logo.png ${output}/favicon.ico
+logo=$(mktemp /tmp/tmpXXXXX)
+inkscape --without-gui --export-png=${logo} --export-width=64 --export-height=64 --file=$(pwd)/logo.svg
+convert ${logo} ${output}/favicon.ico
 for s in 60 76 120 152; do
     size="${s}x${s}"
-    convert -geometry ${size} logo.png ${output}/apple-touch-icon-${size}.png
+    convert -geometry ${size} ${logo} ${output}/apple-touch-icon-${size}.png
 done
+rm ${logo}
 
 chmod -R a+r ${output}
 
