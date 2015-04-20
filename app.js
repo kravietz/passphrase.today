@@ -30,7 +30,7 @@ window['ppMore'] = function () {
     window['ppNewPass']();
 };
 
-window['start'] = function () {
+function start() {
     // framebuster
     if (self == top) {
         console.log('main view enabled');
@@ -68,4 +68,10 @@ window['start'] = function () {
 
     // add titles to the advanced tab
     addTitles();
-};
+}
+
+// actually start the application
+// event handler is used to avoid CSP complaints about inline event handlers
+document.addEventListener('DOMContentLoaded', function () {
+  start();
+});

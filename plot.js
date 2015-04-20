@@ -101,3 +101,9 @@ function plot(where, how, n) {
 
     document.getElementById(n).textContent = num_points.toString();
 }
+
+// actually start the application
+// event handler is used to avoid CSP complaints about inline event handlers
+document.addEventListener('DOMContentLoaded', function () {
+  go();
+});

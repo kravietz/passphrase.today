@@ -44,3 +44,8 @@ h1.logo {
         -webkit-transform: rotate(360deg);
     }
 }
+
+/* random.html */
+canvas {
+    border: 1px solid black;
+}
