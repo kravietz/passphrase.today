@@ -77,7 +77,7 @@ ln dict/*.js $output/dict/
 
 # when changing names, update cache.manifest
 java -jar compiler.jar \
-    --js {app,dict,entropy,passphrase,random,titles}.js \
+    --js {entropy,passphrase,random,titles,dict,app}.js \
     --third_party \
     --compilation_level SIMPLE \
     --formatting PRETTY_PRINT \
@@ -96,8 +96,7 @@ java -jar compiler.jar \
 i="index.html"
 awk -f script.awk $i | java -jar htmlcompressor-1.5.3.jar --compress-js --compress-css > $output/$i
 i="plot.html"
-#java -jar htmlcompressor-1.5.3.jar --compress-js --compress-css $i > $output/$i
-ln $i $output/$i
+java -jar htmlcompressor-1.5.3.jar --compress-js --compress-css $i > $output/$i
 i='styles.css'
 java -jar htmlcompressor-1.5.3.jar --compress-css $i > $output/$i
 
