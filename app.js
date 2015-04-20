@@ -80,6 +80,4 @@ function start() {
 
 // actually start the application
 // event handler is used to avoid CSP complaints about inline event handlers
-document.addEventListener('DOMContentLoaded', function () {
-  start();
-});
+document.addEventListener('DOMContentLoaded', start);
