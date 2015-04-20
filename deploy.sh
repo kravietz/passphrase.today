@@ -56,6 +56,9 @@ else
 fi
 
 if [ -d "$output" ]; then
+    rm -rf "${output}/dict"
+    rm -rf "${output}/fonts"
+    rm -rf "${output}/bootstrap"
     rm "$output/"*
 else
     mkdir -p "$output"
@@ -63,19 +66,21 @@ fi
 
 mkdir -p ${output}/{dict,fonts}
 
-ln sjcl/sjcl.js ${output}/
-ln robots.txt ${output}/
-ln fonts/* ${output}/fonts/
-ln favicon.ico ${output}/
+cp sjcl/sjcl.js ${output}/
+cp robots.txt ${output}/
+cp fonts/* ${output}/fonts/
+cp favicon.ico ${output}/
 
 cp cache.manifest ${output}/
 echo "# build $(date|md5)" >>${output}/cache.manifest
 
 cp -a bootstrap ${output}/
 
-ln dict/*.js ${output}/dict/
+cp dict/*.js ${output}/dict/
 
-# when changing names, update cache.manifest
+# when output changing file names here, update cache.manifest
+
+# compile and optimize JS
 java -jar compiler.jar \
     --js {entropy,passphrase,random,titles,dict,app}.js \
     --third_party \
@@ -91,6 +96,7 @@ java -jar compiler.jar \
     --create_source_map ${output}/plot.js.map \
     > ${output}/plot.js
 
+# process other HTML/JS/CSS files
 i="index.html"
 awk -f script.awk ${i} | java -jar htmlcompressor-1.5.3.jar --compress-js --compress-css > ${output}/${i}
 i="plot.html"
@@ -98,6 +104,7 @@ java -jar htmlcompressor-1.5.3.jar --compress-js --compress-css ${i}> $output/$i
 i='styles.css'
 java -jar htmlcompressor-1.5.3.jar --compress-css ${i} > ${output}/${i}
 
+# compress for Nginx gzip_static
 find ${output}/ | egrep '\.(html|map|svg|eot|woff|woff2|ttf|css|js|manifest)$' | xargs gzip -9kf
 
 # generate favicon and Apple touch images
