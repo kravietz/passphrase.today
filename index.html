@@ -53,19 +53,17 @@
     </div>
     <div class="row">
         <div class="col-md-12 text-center" id="buttons">
-            <button type="button" class="btn btn-default btn-lg" onclick="ppLess()"
-                    title="Less words">
+            <button type="button" class="btn btn-default btn-lg" id="less-entropy-element" title="Less words">
                 <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
                 <span class="glyphicon glyphicon-text-background" aria-hidden="true"></span>
             </button>
-            <button type="button" class="btn btn-primary btn-lg" onclick="ppNewPass()" title="Output new passphrase">
+            <button type="button" class="btn btn-primary btn-lg" id="new-pass-element" title="Output new passphrase">
                 P&nbsp;<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
             </button>
-            <button type="button" class="btn btn-primary btn-lg" onclick="ppNewTrans()" title="Output new mutation of this passphrase">
+            <button type="button" class="btn btn-primary btn-lg" id="new-trans-element" title="Output new mutation of this passphrase">
                 T&nbsp;<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
             </button>
-            <button type="button" class="btn btn-default btn-lg" onclick="ppMore()"
-                    title="More words">
+            <button type="button" class="btn btn-default btn-lg" id="more-entropy-element" title="More words">
                 <span class="glyphicon glyphicon-text-background" aria-hidden="true"></span>
                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
             </button>
@@ -88,14 +86,16 @@
     <div class="row">
         <div class="col-md-offset-4 col-xs-4 col-sm-4 col-md-4 small table-responsive" id="advanced-tab">
             <table class="table table-condensed">
+
                 <thead>
-                <tr onclick="toggle()" class="active text-center">
+                <tr id="toggle-advanced-element" onclick="toggle()" class="active text-center">
                     <th colspan="2">
                         <span class="caret"></span> Advanced
                         <span class="sr-only">Toggle advanced window</span>
                     </th>
                 </tr>
                 </thead>
+
                 <tbody id="advanced" hidden>
 
                 <tr>
