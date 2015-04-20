@@ -75,6 +75,7 @@ cp -a bootstrap $output/
 
 ln dict/*.js $output/dict/
 
+# when changing names, update cache.manifest
 java -jar compiler.jar \
     --js {app,dict,entropy,passphrase,random,titles}.js \
     --third_party \
@@ -83,7 +84,6 @@ java -jar compiler.jar \
     --charset UTF8 \
     --create_source_map $output/main.js.map \
     > $output/main.js
-
 java -jar compiler.jar \
     --js {random,plot}.js \
     --third_party \

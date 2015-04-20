@@ -1,9 +1,11 @@
 CACHE MANIFEST
 index.html
-random.html
+plot.html
 favicon.ico
 main.js
+plot.js
 sjcl.js
+styles.css
 dict/russian.js
 dict/english.js
 dict/polish.js
