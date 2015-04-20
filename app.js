@@ -19,7 +19,7 @@ function outputNewPassphrase() {
     window['pp'].insert(window['pp'].transform(window['pass']));
 }
 
-function outputNewTRansform() {
+function outputNewTransform() {
     window['pp'].insert(window['pp'].transform(window['pass']));
 }
 
@@ -74,7 +74,7 @@ function start() {
 
     document.getElementById('toggle-advanced-element').addEventListener('click', toggleAdvanced);
     document.getElementById('new-pass-element').addEventListener('click', outputNewPassphrase);
-    document.getElementById('new-trans-element').addEventListener('click', outputNewTRansform);
+    document.getElementById('new-trans-element').addEventListener('click', outputNewTransform);
     document.getElementById('less-entropy-element').addEventListener('click', lessEntropy);
     document.getElementById('more-entropy-element').addEventListener('click', moreEntropy);
 }

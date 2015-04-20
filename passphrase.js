@@ -65,7 +65,7 @@ PassGen.prototype.transform = function (pass) {
     var mutations = [false, false];
     var newWordsArray = [];
 
-    for (var i = 0; i < pass.words.length; i++) {
+    for (var i = 0; i < pass.length; i++) {
         var word = pass.words[i];
         var newWord = [];
         for (var j = 0; j < word.length; j++) {
