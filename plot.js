@@ -6,6 +6,14 @@
 "use strict";
 
 function go() {
+    // framebuster
+    if (self == top) {
+        console.log('main view enabled');
+        document.documentElement.style.display = 'block';
+    } else {
+        console.warn('frames detected');
+        top.location = self.location;
+    }
 
     window['sjcl']['random']['startCollectors']();
     window['nr'] = new NistRandom;
