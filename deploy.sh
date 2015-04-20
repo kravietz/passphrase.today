@@ -50,6 +50,9 @@ if [ -z "$1" ]; then
     output="output"
 else
     output="$1"
+    if [ "$output" = "ssh" ]; then
+        output="output"
+    fi
 fi
 
 if [ -d "$output" ]; then
@@ -93,6 +96,6 @@ find $output/ | egrep '\.(html|map|svg|eot|woff|woff2|ttf|css|js|manifest)$' | x
 #mogrify -geometry 120x120 touch-icon-iphone-retina.png
 #mogrify -geometry 152x152 touch-icon-ipad-retina.png
 
-if [ "$output" = "ssh" ]; then
+if [ "$1" = "ssh" ]; then
     rsync --compress-level=9 -avz --delete output/ kautsky:passphrase/
 fi
