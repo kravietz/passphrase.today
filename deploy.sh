@@ -108,7 +108,7 @@ find ${output}/ | egrep '\.(html|map|svg|eot|woff|woff2|ttf|css|js|manifest)$' |
 inkscape --without-gui --export-png=$(pwd)/logo.png --export-width=64 --export-height=64 --file=$(pwd)/logo.svg
 convert logo.png ${output}/favicon.ico
 for s in 60 76 120 152; do
-    size="${s}x${x}"
+    size="${s}x${s}"
     convert -geometry ${size} logo.png ${output}/apple-touch-icon-${size}.png
 done
 
