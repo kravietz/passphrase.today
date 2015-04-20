@@ -80,7 +80,6 @@ java -jar compiler.jar \
     --js {entropy,passphrase,random,titles,dict,app}.js \
     --third_party \
     --compilation_level SIMPLE \
-    --formatting PRETTY_PRINT \
     --charset UTF8 \
     --create_source_map ${output}/main.js.map \
     > ${output}/main.js
@@ -88,7 +87,6 @@ java -jar compiler.jar \
     --js {random,plot}.js \
     --third_party \
     --compilation_level SIMPLE \
-    --formatting PRETTY_PRINT \
     --charset UTF8 \
     --create_source_map ${output}/plot.js.map \
     > ${output}/plot.js
