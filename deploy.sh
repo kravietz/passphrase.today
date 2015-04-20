@@ -64,6 +64,7 @@ ln sjcl/sjcl.js $output/
 ln plot.js $output/
 ln robots.txt cache.manifest $output/
 ln fonts/* $output/fonts/
+ln favicon.ico $output/
 
 cp -a bootstrap $output/
 
