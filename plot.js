@@ -18,11 +18,15 @@ function go() {
     window['sjcl']['random']['startCollectors']();
     window['nr'] = new NistRandom;
 
+    document.getElementById('plot-button').addEventListener('click', runPlots);
+
+}
+
+function runPlots() {
     histogram('sjcl-hist', 'sjcl', 'sjcl-hist-n');
     histogram('math-hist', 'math', 'math-hist-n');
     plot('sjcl-plot', 'sjcl', 'sjcl-plot-n');
     plot('math-plot', 'math', 'math-plot-n');
-
 }
 
 /**
