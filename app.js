@@ -25,12 +25,12 @@ function outputNewTRansform() {
 
 function lessEntropy() {
     window['pp']['less']();
-    window['ppNewPass']();
+    outputNewPassphrase();
 }
 
 function moreEntropy() {
     window['pp']['more']();
-    window['ppNewPass']();
+    outputNewPassphrase();
 }
 
 function start() {
