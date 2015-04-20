@@ -1,7 +1,6 @@
 CACHE MANIFEST
 index.html
 plot.html
-favicon.ico
 main.js
 plot.js
 sjcl.js
@@ -9,6 +8,11 @@ styles.css
 dict/russian.js
 dict/english.js
 dict/polish.js
+favicon.ico
+apple-touch-icon-120x.png
+apple-touch-icon-152x.png
+apple-touch-icon-60x.png
+apple-touch-icon-76x.png
 bootstrap/css/bootstrap-theme.min.css
 bootstrap/css/bootstrap.min.css
 bootstrap/fonts/glyphicons-halflings-regular.eot
