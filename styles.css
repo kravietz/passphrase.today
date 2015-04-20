@@ -1,3 +1,8 @@
+/* part of frame-buster, display enabled explicitly when app starts */
+html {
+            display: none;
+        }
+
 #buttons {
     padding: 10px;
 }
