@@ -19,6 +19,14 @@ html {
     padding-top: 20px;
 }
 
+#language-selection {
+    padding-top: 20px;
+}
+
+#buttons > button {
+    margin-left: 10px;
+}
+
 #footer {
     padding-top: 80px;
 }
