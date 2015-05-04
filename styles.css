@@ -3,9 +3,14 @@ html {
             display: none;
         }
 
-#buttons {
+.buttons {
     padding: 10px;
 }
+
+.buttons > button {
+    margin-left: 10px;
+}
+
 
 #output-wrapper {
     font-family: monospace;
@@ -21,10 +26,6 @@ html {
 
 #language-selection {
     padding-top: 20px;
-}
-
-#buttons > button {
-    margin-left: 10px;
 }
 
 #footer {
