@@ -103,11 +103,11 @@ java -jar htmlcompressor-1.5.3.jar --compress-css ${i} > ${output}/${i}
 # if this is changed, need to update HTML too
 # it's Inkscape weirdness that requires full path for i/o files
 logo=$(mktemp /tmp/tmpXXXXX)
-inkscape --without-gui --export-png=${logo} --export-width=64 --export-height=64 --file=$(pwd)/logo.svg
-convert ${logo} ${output}/favicon.ico
+inkscape --without-gui --export-png=${logo} --export-width=512 --export-height=512 --file=$(pwd)/logo.svg
+convert -geometry 64x64 ${logo} ${output}/favicon.ico
 for s in 60 76 120 152; do
-    size="${s}x${s}"
-    convert -comment Passphrase.Today -geometry ${size} ${logo} ${output}/apple-touch-icon-${size}.png
+    geom="${s}x${s}"
+    convert -comment Passphrase.Today -geometry ${geom} ${logo} ${output}/apple-touch-icon-${geom}.png
 done
 rm ${logo}
 
@@ -115,6 +115,7 @@ chmod -R a+r ${output}
 
 # copy for Cordova
 cp -a ${output}/* cordova/www/
+convert -comment Passphrase.Today cordova/www/icon.png
 
 # compress for Nginx gzip_static
 find ${output}/ | egrep '\.(html|map|svg|eot|woff|woff2|ttf|css|js|manifest)$' | xargs gzip -9kf
