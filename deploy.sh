@@ -117,6 +117,18 @@ chmod -R a+r ${output}
 cp -a ${output}/* cordova/www/
 convert -comment Passphrase.Today cordova/www/icon.png
 
+# if Android platform was not found, just add it
+if [ ! -d cordova/platforms/android ]; then
+    pushd cordova
+    cordova platform add android
+    popd
+    # remove obsolete Internet permission
+    tmp=$(mktemp /tmp/tmpXXXXX)
+    # <uses-permission android:name="android.permission.INTERNET" />
+    grep -v 'uses-permission' <cordova/platforms/android/AndroidManifest.xml >${tmp}
+    mv ${tmp} cordova/platforms/android/AndroidManifest.xml
+fi
+
 # compress for Nginx gzip_static
 find ${output}/ | egrep '\.(html|map|svg|eot|woff|woff2|ttf|css|js|manifest)$' | xargs gzip -9kf
 
