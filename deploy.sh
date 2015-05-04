@@ -30,10 +30,6 @@ if [ ! -d sjcl ]; then
     popd
 fi
 
-if [ ! -d d3 ]; then
-    git clone https://github.com/mbostock/d3.git
-fi
-
 if [ ! -f dict/english.js ]; then
     python3 js.py
 fi
