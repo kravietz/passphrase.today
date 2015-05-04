@@ -103,9 +103,6 @@ java -jar htmlcompressor-1.5.3.jar --compress-js --compress-css ${i}> $output/$i
 i='styles.css'
 java -jar htmlcompressor-1.5.3.jar --compress-css ${i} > ${output}/${i}
 
-# compress for Nginx gzip_static
-find ${output}/ | egrep '\.(html|map|svg|eot|woff|woff2|ttf|css|js|manifest)$' | xargs gzip -9kf
-
 # generate favicon and Apple touch images
 # if this is changed, need to update HTML too
 # it's Inkscape weirdness that requires full path for i/o files
@@ -119,6 +116,12 @@ done
 rm ${logo}
 
 chmod -R a+r ${output}
+
+# copy for Cordova
+cp -a ${output}/* cordova/www/
+
+# compress for Nginx gzip_static
+find ${output}/ | egrep '\.(html|map|svg|eot|woff|woff2|ttf|css|js|manifest)$' | xargs gzip -9kf
 
 if [ "$1" = "ssh" ]; then
     rsync --compress-level=9 --checksum -avz --delete output/ kautsky:passphrase/
