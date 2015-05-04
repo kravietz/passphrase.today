@@ -66,6 +66,8 @@ function loadDictionary(/** string */ lang) {
 
             // hide "loading dictionary" message
             document.getElementById('loading-dictionary').hidden = true;
+            // unhide passphrase field
+            document.getElementById('output').hidden = false;
 
             // export for the inline HTML calls
             window['pp'] = new PassGen(dictionary, 'output');
