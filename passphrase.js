@@ -107,10 +107,12 @@ PassGen.prototype.more = function () {
 
 // insert the generated passphrase into HTML block
 PassGen.prototype.insert = function (pass) {
+    // actually output the passphrase into the target field
     var pass_str = pass.toString();
     var output = document.getElementById(this.id);
     output.setAttribute('value', pass_str);
     output.setAttribute('size', pass_str.length);
+    output.hidden = false;
 
     document.getElementById('pp-target-entropy').textContent = this.target_entropy;
     var p = document.getElementById('pp-character-entropy');
