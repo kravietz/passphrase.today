@@ -109,13 +109,13 @@ for s in 60 76 120 152; do
     geom="${s}x${s}"
     convert -comment Passphrase.Today -geometry ${geom} ${logo} ${output}/apple-touch-icon-${geom}.png
 done
-rm ${logo}
 
 chmod -R a+r ${output}
 
 # copy for Cordova
 cp -a ${output}/* cordova/www/
-convert -comment Passphrase.Today cordova/www/icon.png
+convert -comment Passphrase.Today ${logo} cordova/www/icon.png
+rm ${logo}
 
 # if Android platform was not found, just add it
 if [ ! -d cordova/platforms/android ]; then
