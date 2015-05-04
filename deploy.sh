@@ -132,3 +132,15 @@ find ${output}/ | egrep '\.(html|map|svg|eot|woff|woff2|ttf|css|js|manifest)$' |
 if [ "$1" = "ssh" ]; then
     rsync --compress-level=9 --checksum -avz --delete output/ kautsky:passphrase/
 fi
+
+if [ "$1" = "apk" ]; then
+    pushd cordova
+    cordova prepare
+    cordova build --release
+    apk="platforms/android/ant-build/MainActivity-release-unsigned.apk"
+    keystore="../my-release-key.keystore"
+    newapk="Passphrase.Today.apk"
+    cp ${apk} ${newapk}
+    jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ${keystore} ${newapk} alias_name
+    popd
+fi
