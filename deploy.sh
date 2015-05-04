@@ -124,9 +124,6 @@ if [ ! -d cordova/platforms/android ]; then
     popd
     # remove obsolete Internet permission
     tmp=$(mktemp /tmp/tmpXXXXX)
-    # <uses-permission android:name="android.permission.INTERNET" />
-    grep -v 'uses-permission' <cordova/platforms/android/AndroidManifest.xml >${tmp}
-    mv ${tmp} cordova/platforms/android/AndroidManifest.xml
 fi
 
 # compress for Nginx gzip_static
