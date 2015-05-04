@@ -113,7 +113,7 @@ PassGen.prototype.insert = function (pass) {
     // actually insert the passphrase string
     output.textContent = pass_str;
     // rescale to fit without scrolling
-    output.rows = Math.ceil(pass_str.length/output.cols);
+    output.rows = Math.ceil(pass_str.length/output.cols) + 1;
 
     document.getElementById('pp-target-entropy').textContent = this.target_entropy;
     var p = document.getElementById('pp-character-entropy');
