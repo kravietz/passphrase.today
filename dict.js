@@ -39,6 +39,11 @@ function loadDictionary(/** string */ lang) {
 
     var dict_path = 'dict/' + lang + '.js';
 
+    // unhide the "loading dictionary" message
+    document.getElementById('loading-dictionary').hidden = false;
+    // hide passphrase output field
+    document.getElementById('output').hidden = true;
+
     // delete any previously injected tags
     // just in case, there should be none
     var e = document.getElementById('dictionary');
@@ -58,6 +63,9 @@ function loadDictionary(/** string */ lang) {
         if (!done && (!document.readyState || document.readyState == "loaded" || document.readyState == "complete" || document.readyState == "interactive" )) {
 
             done = true;
+
+            // hide "loading dictionary" message
+            document.getElementById('loading-dictionary').hidden = true;
 
             // export for the inline HTML calls
             window['pp'] = new PassGen(dictionary, 'output');
@@ -96,4 +104,4 @@ function loadDictionary(/** string */ lang) {
 window['switchDict'] = function() {
     var lang = document.getElementById("lang").options[document.getElementById("lang").selectedIndex].value;
     loadDictionary(lang);
-}
+};

@@ -59,10 +59,14 @@
         <div class="col-md-12 text-center" id="output-wrapper">
             <noscript>This application will not work without JavaScript.</noscript>
 
-            <p class="alert alert-info" role="alert" id="output">
+            <span class="alert alert-info" role="alert" id="loading-dictionary">
                 Loading dictionary... This can take up to a few minutes but only happens once.
-                <span class="glyphicon glyphicon-refresh spinning" aria-hidden="true">
-            </p>
+                <span class="glyphicon glyphicon-refresh spinning" aria-hidden="true"></span>
+            </span>
+
+            <label class="sr-only" for="output">Output passphrase</label>
+            <input id="output" type="text" class="alert alert-success" role="alert">
+
         </div>
     </div>
     <div class="row">

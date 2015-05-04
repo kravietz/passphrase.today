@@ -63,9 +63,12 @@ function start() {
 
         // something went wrong, display error and die
         console.error('SJCL not ready');
+        var err = document.createElement('span');
+        err.setAttribute('class', "alert-danger");
+        err.setAttribute('role', 'alert');
         var msg = 'Sorry, your browser does not support cryptographic random numbers.';
-        document.getElementById('output').innerHTML = msg;
-        document.className = 'alert alert-danger';
+        err.textContent = msg;
+        document.getElementById('output-wrapper').appendChild(err);
         console.error(msg);
     }
 
