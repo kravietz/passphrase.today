@@ -62,8 +62,8 @@ Let's take one generated passphrase as a sample:
 
     wood alcohol on the table
     
-It looks funny, but it's composed from only **two** tokens actually: the dictionary also contains
-phrases (`wood alcohol` and `on the table` in this case). Applying the entropy
+It looks funny, but it's really only composed from **two** tokens as the dictionary also contains
+short phrases (`wood alcohol` and `on the table` in this case). Applying the entropy
 estimation algorithms will give the following results>
 
 <table>
@@ -76,18 +76,21 @@ estimation algorithms will give the following results>
 This passphrase passes the minimum 35 bits of entropy threshold and is thus presented to the user as a candidate. To make
 things simpler, *this* example doesn't use the transformations described below.
 
-## Brute-force guessing
+## Brute-force attacks
 
 Treating the passphrase as a string of characters and applying a brute-force guessing attack won't be in most cases
-feasible because the passphrases tend to be longer than typical passwords. The sample passphrase `wood alcohol...` passphrase
+feasible because the passphrases tend to be longer than typical passwords. The sample passphrase `wood alcohol...` 
 is 25 characters long and let's assume for simplicity it's built from an alphabet of only 26 characters (`a-z` and space).
-This gives a keyspace
-of 2e35. Then, let's assume we can employ the [current Bitcoin hash rate](https://blockchain.info/charts/hash-rate) to crack
-passwords (which is around 3.5e17 in Q2 2015). This gives around 1e10 years to search the keyspace (while it would take only
-17 seconds if the password was 16 characters long).
+This gives a keyspace of 2e35 (<!-- 26**25 -->). Then, let's assume we can employ the
+[current Bitcoin hash rate](https://blockchain.info/charts/hash-rate) to crack
+passwords (which is around 3.5e17 in Q2 2015). This gives around 1e10 years <!-- 26**25/3.5e17/3600/24/365  --> to
+search the keyspace (while it would take only 7 seconds if the password was 13 characters long). <!-- 26**13/3.5e17 -->
 
-The actual alphabets are much larger than the 26 characters from the example: from 62 unique characters in Russian to 71 in English.
-This obviously **increases** the keyspace (to 1e21).
+The actual alphabets used by this generator are however much larger than the 26 characters from the example:
+they can range from 62 unique characters in Russian to 71 in English. This significantly increases the search time (1e21 years).
+<!-- math.log10(71**25/3.5e17/3600/24/365) -->
+
+## Markov attacks
 
 The exhaustive keyspace search model assumes characters selected randomly from the alphabet, but with natural
 language dictionary it's not random at all: not only unique characters occur at different frequencies, but also follow
@@ -114,22 +117,23 @@ implementation):
 
 So even though the keyspace remains the same, chances are they will hit the right combination much faster: in my testing on
 6 character passwords Markov cracking tried all natural-language-looking strings in just 0.24% of the keyspace
-(3e8 instead of 3e11).
+(5e5 <!-- math.log10(25**6*0.24/100) --> instead of 2e8<!-- math.log10(25**6) -->).
+This doesn't *guarantee* a hit, but with natural language words it makes it  very likely.
 
-But even with this reduction it's still in unreachable regions for the full length passphrase.
+However, for full length passphrase, even with this reduction it's still in unreachable regions (4e18 years <!-- 71**25*0.24/100/3.5e17/3600/24/365 -->)
+so character-by-character brute force attacks on passphrases aren't very practical.
 
 ## Dictionary combination attacks
 
-As the passphrases generated with default parameters will be in most cases well over 20 characters long, brute-force attacks
-attempting to guess the passphrase character by character won't be feasible. Take this passphrase for example:
+Instead of guessing the passphrase character by character the attacker may choose to try to reproduce the approach used by this generator:
+take the same dictionary and try all possible combinations of *words*. Take this passphrase for example &mdash; it's just two words:
 
      niepoprzekłuwany niewybębniany
 
-However, attacks trying all combinations of the words **from the same dictionary as we use** may be still quite effective
-&mdash; for example, for two-word passphrases selected from a 300'000 words long dictionary there will be 90 billions
-of combinations (9e10), which can be searched... in a minute using a
-[GPU](https://en.wikipedia.org/wiki/Graphics_processing_unit)-powered
-crackers like [oclHashCat](http://hashcat.net/oclhashcat/) on a middle-class gaming computer:
+This attack may be still quite effective &mdash; for example, for two-word passphrases selected from a 300'000 words long dictionary
+there will be 90 billions <!-- 3e5**2 --> of combinations (9e10), which can be searched... in a minute using a
+[GPU](https://en.wikipedia.org/wiki/Graphics_processing_unit)-powered crackers
+like [oclHashCat](http://hashcat.net/oclhashcat/) on a middle-class gaming computer:
 
     7cd687bbabf32e577f901f3876618258:niepoprzekłuwany niewybębniany
     
@@ -153,8 +157,17 @@ crackers like [oclHashCat](http://hashcat.net/oclhashcat/) on a middle-class gam
 In the above example a keyspace of 9e10 is searched at speed of 2213e6 hashes per second, which theoretically should
 take 40 seconds, but as they key is found after searching roughly half of the keyspace it only takes 27 seconds.
 
-If the passphrase was built using 3 words it would take 141 days to crack on the same machine, and if it was 4 words
-the time would increase to 116'000 years and so on. So, under the same parameters the time to crack would be the following:
+The difficulty grows quickly with each word: if the passphrase was built using 3 words it would take 141 days
+to crack on the same machine, and if it was 4 words the time would increase to 116'000 years and so on. This looks good, but
+remember we're modelling this now for a medium class gaming computer.
+
+The [Bitcoin hash rate surge](https://blockchain.info/charts/hash-rate?timespan=all&showDataPoints=false&daysAverageString=1&show_header=true&scale=0&address=)
+has taught us that building GPU and ASIC-based hashing farms can be relatively inexpensive.
+As of 2015 the Bitcoin mining rate (which is technically SHA256 hashing rate) is in the regions of 3.5e17 hashes per second. Today's cost
+of reproducing this hash power can be estimated at around $157m, which is again not something completely unreachable. 
+<!--  437k BFL Monarchs at $360 of 800e9 h/s per unit -->
+
+So, taking the BTC hash rate as reasonable limit of human capabilities, the times to crack would be now as follows:
 
 <table>
 <tr><th>Words <th>Keyspace <th>Time at 2 GH/s <th>Time at 3.5e17 H/s
@@ -165,29 +178,26 @@ the time would increase to 116'000 years and so on. So, under the same parameter
 <tr><td>6 <td>7.29e+32 <td>1e16 years <td>6e7 years
 </table>
 
-Unfortunately, the [Bitcoin hash rate surge](https://blockchain.info/charts/hash-rate?timespan=all&showDataPoints=false&daysAverageString=1&show_header=true&scale=0&address=)
-has taught us how to build GPU or ASIC farms cheaply so even that 3.5e17 hash rate doesn't look completely
-unreasonably when applied to password cracking.
+The problem with longer passphrases is human ability to remember them. While humans can easily remember even long text
+because of the semantic links between the words, what we're looking for is exactly opposite: words that are completely
+randomly chosen. So just increasing number of words in passphrase doesn't seem like a viable solution.
 
-In addition, the longer the passphrase, the more difficult it becomes to remember and type, thus
-cancelling their advantage over character based passwords. So relying on the number of words alone perhaps is not the
-best way forward.
+## Defense against dictionary combination attacks
 
-## Defense against dictionary attacks
-
-To render the dictionary attacks useless the generator applies **transformations** to the dictionary words.
+To render the dictionary attacks useless this generator applies **transformations** to the dictionary words.
 Currently there are two of them:
 
 * injection of non-dictionary characters (digits, punctuation etc)
 * case switching
 
-The transformations are applied to a random character of the passphrase and each of them will usually happen
-only once. Here's an example how transformations work:
+The transformations are applied randomly: i.e. each character in the whole passphrase can be modified by each of them.
+The parameters are set so that it's almost certain that out of every 10 characters at least one will be most likely modified.
 
     wOod5alcohol on the table
     wood alc[hOl on the table
     Wood alcohol on %he table
     wood a9cohol on the table
 
-These passphrases can no longer be cracked using dictionary combination attack or, more precisely, such an attack
-would be equivalent in complexity to a brute force attack.
+Average word length in this dictionary is 12 characters. In each word any character can now switch case (13 variants) and
+become replaced by a special character (169 variants) so this now inflates <!-- 13*13*38 --> the dictionary from 3e5 words to 2e9 words.
+Keyspace for 3 word passphrase becomes now 8e27 with exhaustive search time of 700 years with the assumed hash rate.
