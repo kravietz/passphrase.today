@@ -99,22 +99,18 @@ and [HashCat](http://hashcat.net/wiki/doku.php?id=statsprocessor)).
 A naïve brute-force attack would try the following combinations, spending a lot of time on sequences
 that never appear in natural language (like `aaaa`):
 
-```
-aaaaa
-baaaa
-caaaa
-...
-```
+    aaaaa
+    baaaa
+    caaaa
+    ...
 
 Markov attacks will try the more frequent character sequences first. Sample of strings tried by Markov algorithm (HashCat
 implementation):
 
-```
-serera
-seaner
-seller
-...
-```
+    serera
+    seaner
+    seller
+    ...
 
 So even though the keyspace remains the same, chances are they will hit the right combination much faster: in my testing on
 6 character passwords Markov cracking tried all natural-language-looking strings in just 0.24% of the keyspace
@@ -135,26 +131,25 @@ of combinations (9e10), which can be searched... in a minute using a
 [GPU](https://en.wikipedia.org/wiki/Graphics_processing_unit)-powered
 crackers like [oclHashCat](http://hashcat.net/oclhashcat/) on a middle-class gaming computer:
 
-```
-7cd687bbabf32e577f901f3876618258:niepoprzekłuwany niewybębniany
+    7cd687bbabf32e577f901f3876618258:niepoprzekłuwany niewybębniany
+    
+    Session.Name...: oclHashcat
+    Status.........: Cracked
+    Input.Left.....: File (pl.txt)
+    Input.Right....: File (pl.txt)
+    Hash.Target....: 7cd687bbabf32e577f901f3876618258
+    Hash.Type......: MD5
+    Time.Started...: Tue Apr 07 23:21:19 2015 (24 secs)
+    Speed.GPU.#1...:  2213.7 MH/s
+    Recovered......: 1/1 (100.00%) Digests, 1/1 (100.00%) Salts
+    Progress.......: 53030907904/90406658329 (58.66%)
+    Skipped........: 0/53030907904 (0.00%)
+    Rejected.......: 0/53030907904 (0.00%)
+    Restore.Point..: 300677/300677 (100.00%)
+    
+    Started: Tue Apr 07 23:21:19 2015
+    Stopped: Tue Apr 07 23:21:46 2015
 
-Session.Name...: oclHashcat
-Status.........: Cracked
-Input.Left.....: File (pl.txt)
-Input.Right....: File (pl.txt)
-Hash.Target....: 7cd687bbabf32e577f901f3876618258
-Hash.Type......: MD5
-Time.Started...: Tue Apr 07 23:21:19 2015 (24 secs)
-Speed.GPU.#1...:  2213.7 MH/s
-Recovered......: 1/1 (100.00%) Digests, 1/1 (100.00%) Salts
-Progress.......: 53030907904/90406658329 (58.66%)
-Skipped........: 0/53030907904 (0.00%)
-Rejected.......: 0/53030907904 (0.00%)
-Restore.Point..: 300677/300677 (100.00%)
-
-Started: Tue Apr 07 23:21:19 2015
-Stopped: Tue Apr 07 23:21:46 2015
-```
 In the above example a keyspace of 9e10 is searched at speed of 2213e6 hashes per second, which theoretically should
 take 40 seconds, but as they key is found after searching roughly half of the keyspace it only takes 27 seconds.
 
@@ -171,7 +166,7 @@ the time would increase to 116'000 years and so on. So, under the same parameter
 </table>
 
 Unfortunately, the [Bitcoin hash rate surge](https://blockchain.info/charts/hash-rate?timespan=all&showDataPoints=false&daysAverageString=1&show_header=true&scale=0&address=)
-has taught us how to build GPU or ASIC farms cheaply so even that 3.5e17 hash rate doesn't apply completely
+has taught us how to build GPU or ASIC farms cheaply so even that 3.5e17 hash rate doesn't look completely
 unreasonably when applied to password cracking.
 
 In addition, the longer the passphrase, the more difficult it becomes to remember and type, thus
@@ -189,12 +184,10 @@ Currently there are two of them:
 The transformations are applied to a random character of the passphrase and each of them will usually happen
 only once. Here's an example how transformations work:
 
-```
-wOod5alcohol on the table
-wood alc[hOl on the table
-Wood alcohol on %he table
-wood a9cohol on the table
-```
+    wOod5alcohol on the table
+    wood alc[hOl on the table
+    Wood alcohol on %he table
+    wood a9cohol on the table
 
 These passphrases can no longer be cracked using dictionary combination attack or, more precisely, such an attack
 would be equivalent in complexity to a brute force attack.
