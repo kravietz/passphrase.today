@@ -51,13 +51,15 @@ else
     fi
 fi
 
-if [ -d "$output" ]; then
+if [ ! -d "${output}" ]; then
+    mkdir -p "${output}"
+fi
+
+if [ "$1" = "clean" ]; then
     rm -rf "${output}/dict"
     rm -rf "${output}/fonts"
     rm -rf "${output}/bootstrap"
     rm "$output/"*
-else
-    mkdir -p "$output"
 fi
 
 mkdir -p ${output}/{dict,fonts}
