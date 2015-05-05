@@ -37,7 +37,7 @@ fi
 FONTS="Essays1743-bold-italic.eot Essays1743-bold-italic.ttf Essays1743-bold-italic.woff Essays1743-bold.eot Essays1743-bold.ttf Essays1743-bold.woff Essays1743-italic.eot Essays1743-italic.ttf Essays1743-italic.woff Essays1743.eot Essays1743.ttf Essays1743.woff"
 
 for f in ${FONTS}; do
-    if [ ! -f fonts/$f ]; then
+    if [ ! -f fonts/${f} ]; then
         curl --compress -o "fonts/$f" "http://diveintohtml5.info/f/$f"
     fi
 done
