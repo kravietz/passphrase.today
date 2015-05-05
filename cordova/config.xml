@@ -1,13 +1,16 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="today.passphrase" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="org.kravietz.passphrase" version="0.0.1" xmlns="http://www.w3.org/ns/widgets"
+        xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Passphrase Today</name>
     <description>
-        Secure, multi-language passphrase generator based on industry standards for random number generation and cryptography
+        Secure, multi-language passphrase generator based on industry standards for random number generation and
+        cryptography
     </description>
-    <author email="pawel.krawczyk@hush.com" href="https://passphrase.today/">
-        Paweł Krawczyk
-    </author>
-    <content src="index.html" />
-    <access origin="" />
-    <icon src="logo.png" />
+    <author email="pawel.krawczyk@hush.com" href="https://passphrase.today/">Paweł Krawczyk</author>
+    <content src="index.html"/>
+    <access origin="https://passphrase.today/"/>
+    <access origin="https://github.com/"/>
+    <access origin="https://plus.google.com/"/>
+    <access origin="https://blockchain.info/stats"/>
+    <icon src="logo.png"/>
 </widget>
