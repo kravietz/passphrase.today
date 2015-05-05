@@ -1,4 +1,5 @@
 CACHE MANIFEST
+CACHE:
 index.html
 plot.html
 main.js
@@ -33,3 +34,5 @@ fonts/Essays1743.eot
 fonts/Essays1743.ttf
 fonts/Essays1743.woff
 fonts/fonts.css
+NETWORK:
+https://blockchain.info/stats
