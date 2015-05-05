@@ -65,7 +65,7 @@ PassGen.prototype.gen = function () {
 // transform a dictionary-based passphrase
 // by randomly modifying the words
 PassGen.prototype.transform = function (pass) {
-    var mutations = [false, false];
+    var mutations_applied = [false, false];
     var newWordsArray = [];
 
     for (var i = 0; i < pass.length; i++) {
@@ -74,13 +74,13 @@ PassGen.prototype.transform = function (pass) {
         for (var j = 0; j < word.length; j++) {
             var ch = word[j];
 
-            if (!mutations[0] && this.nist.getRange(1000) < 100) {
+            if (!mutations_applied[0] && this.nist.getRange(1000) < 100) {
                 ch = (ch.toUpperCase() === ch) ? ch.toLowerCase() : ch.toUpperCase();
-                mutations[0] = true;
+                mutations_applied[0] = true;
             }
-            if (!mutations[1] && this.nist.getRange(1000) < 100) {
+            if (!mutations_applied[1] && this.nist.getRange(1000) < 100) {
                 ch = SPECIAL_CHARS[this.nist.getRange(SPECIAL_CHARS.length)];
-                mutations[1] = true;
+                mutations_applied[1] = true;
             }
 
             newWord.push(ch);
