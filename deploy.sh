@@ -51,6 +51,8 @@ else
     fi
 fi
 
+find "${output}" -type f | xargs rm -f
+
 if [ ! -d "${output}" ]; then
     mkdir -p "${output}"
 fi
@@ -115,6 +117,7 @@ done
 chmod -R a+r ${output}
 
 # copy for Cordova
+find "cordova/www" -type f | xargs rm -f
 cp -a ${output}/* cordova/www/
 convert -comment Passphrase.Today ${logo} cordova/www/icon.png
 rm ${logo}
@@ -123,9 +126,8 @@ rm ${logo}
 if [ ! -d cordova/platforms/android ]; then
     pushd cordova
     cordova platform add android
+    rm -rf platforms/android/res/drawable-*
     popd
-    # remove obsolete Internet permission
-    tmp=$(mktemp /tmp/tmpXXXXX)
 fi
 
 # compress for Nginx gzip_static
