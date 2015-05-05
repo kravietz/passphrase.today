@@ -5,6 +5,7 @@
 "use strict";
 
 /** @const */ var /** string */ DEFAULT_LANG = 'english';
+/** @const */ var /** string */ LS_TARGET_ENTROPY = 'target_entropy';
 
 /**
  * Validate if input language is a supported one
@@ -95,7 +96,7 @@ function loadDictionary(/** string */ lang) {
 
     // save current language selection
     if ('localStorage' in window) {
-        localStorage.setItem('language', lang);
+        localStorage.setItem(LS_LANGUAGE, lang);
     }
 
     // actually inject the tag

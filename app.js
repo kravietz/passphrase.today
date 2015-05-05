@@ -4,6 +4,8 @@
  */
 "use strict";
 
+/** @const */ var /** string */ LS_LANGUAGE= 'language';
+
 // placeholders
 window['dictionary'] = {};
 window['pp'] = {};
@@ -50,7 +52,7 @@ function start() {
 
         var lang;
         if ('localStorage' in window) {
-            lang = localStorage.getItem('language') || DEFAULT_LANG;
+            lang = localStorage.getItem(LS_LANGUAGE) || DEFAULT_LANG;
         } else {
             lang = DEFAULT_LANG;
         }

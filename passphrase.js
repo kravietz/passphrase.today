@@ -44,7 +44,7 @@ function PassGen(/** Object */ d, /** string */ id) {
     this.ee = new EntropyEstimator(this.d);
 
     if ('localStorage' in window) {
-        this.target_entropy = parseInt(localStorage.getItem('spgen.target_entropy')) || DEFAULT_TARGET_ENTROPY;
+        this.target_entropy = parseInt(localStorage.getItem(LS_TARGET_ENTROPY)) || DEFAULT_TARGET_ENTROPY;
     }
 }
 
@@ -92,7 +92,7 @@ PassGen.prototype.less = function () {
     if (this.target_entropy > 1) {
         this.target_entropy -= ENTROPY_STEP;
         if ('localStorage' in window) {
-            localStorage.setItem('spgen.target_entropy', this.target_entropy);
+            localStorage.setItem(LS_TARGET_ENTROPY, this.target_entropy);
         }
     }
 };
@@ -101,7 +101,7 @@ PassGen.prototype.less = function () {
 PassGen.prototype.more = function () {
     this.target_entropy += ENTROPY_STEP;
     if ('localStorage' in window) {
-        localStorage.setItem('spgen.target_entropy', this.target_entropy);
+        localStorage.setItem(LS_TARGET_ENTROPY, this.target_entropy);
     }
 };
 
