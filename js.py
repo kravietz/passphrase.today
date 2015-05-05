@@ -28,7 +28,8 @@ var dictionary = {{
     dictionary_size: {dictionary_size},
     entropy_per_word: {entropy_per_word},
     alphabet_frequencies: {alphabet_frequencies},
-    dictionary: {dictionary}
+    avg_word_len: {avg_word_len},
+    dictionary: {dictionary},
 }}
 """
 
@@ -63,6 +64,7 @@ def fetch_dict(k, v):
     rr = re.compile(transform)
 
     alphabet = {}
+    character_count = 0 # for avg word len
 
     print('Fetching', language, 'from', url, end=' ')
 
@@ -91,7 +93,12 @@ def fetch_dict(k, v):
             line = rr.match(line.strip()).group(1)
         except AttributeError:
             # ...but some words don't have the suffix
-            line = line.strip()
+            pass
+
+        line = line.strip()
+
+        # record word len for avg len
+        character_count += len(line)
 
         # record character count for frequency
         for c in line:
@@ -101,7 +108,7 @@ def fetch_dict(k, v):
                 alphabet[c] = 1
 
         # append the word to dictionary
-        dictionary.append(line.strip())
+        dictionary.append(line)
 
     # total number of characters counted in all words
     total_chars = 0.0
@@ -122,6 +129,8 @@ def fetch_dict(k, v):
         dictionary_size=len(dictionary),
         entropy_per_word=math.log2(len(dictionary)),
         alphabet_frequencies=json.dumps(alphabet, ensure_ascii=False),
+        avg_word_len=math.ceil(character_count/len(dictionary)),
+        # should be last as it's longest
         dictionary=json.dumps(dictionary, ensure_ascii=False)
     ))
 
