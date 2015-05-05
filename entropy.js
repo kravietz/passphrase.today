@@ -4,7 +4,7 @@
  */
 "use strict";
 
-/** @const */ var /** string */ BLOCKCHAIN_STATS_URL = 'https://blockchain.info/stats?format=json';
+/** @const */ var /** string */ BLOCKCHAIN_STATS_URL = 'https://blockchain.info/q/hashrate';
 /** @const */ var /** string */ LS_HASH_RATE = 'blockchain_hash_rate';
 /** @const */ var /** string */ LS_HASH_RATE_TIMESTAMP = 'blockchain_hash_rate_timestamp';
 /**
@@ -35,55 +35,58 @@ EntropyEstimator.prototype.getMinEntropy = function (pass) {
  * @returns {number}
  */
 EntropyEstimator.prototype.getHashRate = function () {
-    var hash_rate = DEFAULT_HASH_RATE;
-    var blockchain_hash_rate = 0;
-    var hash_rate_timestamp = new Date();
-
-    // try to read cached value
-    if ('localStorage' in window) {
-        hash_rate_timestamp = new Date(localStorage.getItem(LS_HASH_RATE_TIMESTAMP)) || new Date();
-        hash_rate = parseFloat(localStorage.getItem(LS_HASH_RATE)) || DEFAULT_HASH_RATE;
-        // if cached hash rate younger than 7 days, use the cached value
-        if (new Date() - hash_rate_timestamp < 60*60*24*7*1e3) {
-            return hash_rate;
+    // try to read cached values
+    if (this.hash_rate === undefined) {
+        if ('localStorage' in window) {
+            this.hash_rate = parseFloat(localStorage.getItem(LS_HASH_RATE)) || DEFAULT_HASH_RATE;
+        } else {
+            this.hash_rate = DEFAULT_HASH_RATE;
+        }
+    }
+    if (this.hash_rate_timestamp === undefined) {
+        if ('localStorage' in window) {
+            this.hash_rate_timestamp = new Date(localStorage.getItem(LS_HASH_RATE_TIMESTAMP)) || new Date();
+        } else {
+            this.hash_rate_timestamp = new Date();
         }
     }
 
+    // if cached hash rate younger than 1 day, use the cached value
+    if (new Date() - this.hash_rate_timestamp < 60*60*24*1e3) {
+        return this.hash_rate;
+    }
+
+    // check at BlockChain.info
     var req = new XMLHttpRequest();
-    req.onreadystatechange = function () {
-        var DONE = this.DONE || 4;
-        if (this.readyState === DONE) {
-            try {
-                var stats = JSON.parse(req.responseText);
-                blockchain_hash_rate = stats['hash_rate'];
-            } catch (e) {
-                console.warn('Cannot parse BlockChain response:', e);
-                return hash_rate; // return default
-            }
 
-            // only record the maximum value seen from BlockChain
-            // the current hash rate fluctuates, but for our purposes
-            // we're interested in the highest one
-            if (blockchain_hash_rate > hash_rate) {
-                hash_rate = blockchain_hash_rate;
-                if ('localStorage' in window) {
-                    localStorage.setItem(LS_HASH_RATE, hash_rate);
-                    localStorage.setItem(LS_HASH_RATE_TIMESTAMP, new Date());
-                }
-            }
-
-            // this is the "fully successful" execution path
-            console.log('BlockChain.info hash rate', stats['hash_rate]']);
-            return hash_rate;
-        }
-    };
     try {
-        req.open('GET', BLOCKCHAIN_STATS_URL, true);
+        req.open('GET', BLOCKCHAIN_STATS_URL, false /* synchronous request */ );
         req.send(null);
     } catch (e) {
         console.warn('Cannot connect to BlockChain:', e);
-        return hash_rate; // return default
+        return this.hash_rate; // return default
     }
+
+    // parse API response with a sanity check
+    // as parseFloat() can return NaN
+    var blockchain_hash_rate = 0;
+    if (parseFloat(req.responseText) > 0) {
+        blockchain_hash_rate = parseFloat(req.responseText);
+    }
+
+    // only record the maximum value seen from BlockChain
+    // the current hash rate fluctuates, but for our purposes
+    // we're interested in the highest one
+    if (blockchain_hash_rate > this.hash_rate) {
+        this.hash_rate = blockchain_hash_rate; // update the object's value
+        if ('localStorage' in window) {
+            localStorage.setItem(LS_HASH_RATE, this.hash_rate);
+            localStorage.setItem(LS_HASH_RATE_TIMESTAMP, new Date());
+        }
+    }
+
+    return this.hash_rate;
+
 };
 
 EntropyEstimator.prototype.getShannon = function (pass) {
