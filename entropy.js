@@ -7,6 +7,7 @@
 /** @const */ var /** string */ BLOCKCHAIN_STATS_URL = 'https://blockchain.info/q/hashrate';
 /** @const */ var /** string */ LS_HASH_RATE = 'blockchain_hash_rate';
 /** @const */ var /** string */ LS_HASH_RATE_TIMESTAMP = 'blockchain_hash_rate_timestamp';
+/** @const */ var /** Array<number> */ NIST_MAP = [4, 2, 2, 2, 2, 2, 2, 2, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5];
 /**
  * If on-line hash rate is unreachable we use default value which was recorded on
  * 5 May 2015
@@ -22,11 +23,71 @@ function EntropyEstimator(/** Object */ dictionary) {
     this.dictionary = dictionary;
 }
 
-EntropyEstimator.prototype.nistMap = [4, 2, 2, 2, 2, 2, 2, 2, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5];
+EntropyEstimator.prototype.nistMap = NIST_MAP;
 
 EntropyEstimator.prototype.getMinEntropy = function (pass) {
     // run all entropy estimators and
     return Math.min(this.getNist(pass), this.getShannon(pass), this.getWord(pass));
+};
+
+/**
+ * Estimate time to crack using Bitcoin hash rate.
+ * @param pass
+ * @returns {number}
+ */
+EntropyEstimator.prototype.getCrackTime = function (pass) {
+    var hash_rate_bn = new sjcl.bn;
+    hash_rate_bn.initWith(Math.ceil(this.getHashRate()));
+    // nominal hash rate is in Gh/s, normalize to h/s
+    hash_rate_bn = hash_rate_bn.mul(1e9);
+
+    // keyspace when cracking as combination of dictionary words
+    // keyspace = keyspace ** words_in_passphrase
+    var keyspace_as_words_bn = new sjcl.bn;
+    keyspace_as_words_bn.initWith(this.dictionary.dictionary_size);
+    var words_in_passphrase = pass.length;
+    keyspace_as_words_bn = keyspace_as_words_bn.power(words_in_passphrase);
+
+    //
+    var crack_time_seconds = keyspace_as_words_bn / hash_rate_bn;
+
+    return crack_time_seconds;
+};
+
+/**
+ *
+ * @param crack_time_seconds
+ * @returns {string}
+ */
+EntropyEstimator.prototype.getCrackTimeText = function (crack_time_seconds) {
+    var ret = "seconds";
+
+    if (crack_time_seconds > 60) {
+        ret = "minutes";
+    }
+    if (crack_time_seconds > 3600) {
+        ret = "hours";
+    }
+    if (crack_time_seconds > 3600*24) {
+        ret = "days";
+    }
+    if (crack_time_seconds > 3600*24*30) {
+        ret = "months";
+    }
+    if (crack_time_seconds > 3600*24*365) {
+        ret = "years";
+    }
+    if (crack_time_seconds > 3600*24*365*10) {
+        ret = "tens of years";
+    }
+    if (crack_time_seconds > 3600*24*365*100) {
+        ret = "hundreds of years";
+    }
+    if (crack_time_seconds > 3600*24*365*1000) {
+        ret = "hundreds of years";
+    }
+
+    return ret;
 };
 
 /**
