@@ -5,6 +5,7 @@
 
 "use strict";
 
+// called when page loads
 function go() {
     // framebuster
     if (self == top) {
@@ -22,6 +23,7 @@ function go() {
 
 }
 
+// called when user clicks on the Run! button
 function runPlots() {
     var e = document.createElement('span');
     e.setAttribute("class", "glyphicon glyphicon-refresh spinning");
@@ -93,7 +95,6 @@ function histogram(where, how, n) {
 /**
  * Plot bitmap representation of random number generator output.
  */
-
 function plot(where, how, n) {
     var e = document.getElementById(where);
     var c = e.getContext('2d');
