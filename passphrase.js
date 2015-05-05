@@ -15,10 +15,13 @@
  */
 function Passphrase(/** ?Array<string> */ words) {
     if (words) {
+        // the actual passphrase words array
         this.words = words;
     } else {
         this.words = [];
     }
+
+    // word count
     this.length = this.words.length;
 }
 Passphrase.prototype.toString = function () {
