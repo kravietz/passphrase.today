@@ -84,7 +84,7 @@ EntropyEstimator.prototype.getCrackTimeText = function (pass) {
         ret = "hundreds of years";
     }
     if (crack_time_seconds > 3600*24*365*1000) {
-        ret = "hundreds of years";
+        ret = "thousands of years";
     }
 
     return ret;
