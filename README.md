@@ -167,16 +167,21 @@ As of 2015 the Bitcoin mining rate (which is technically SHA256 hashing rate) is
 of reproducing this hash power can be estimated at around $157m, which is again not something completely unreachable. 
 <!--  437k BFL Monarchs at $360 of 800e9 h/s per unit -->
 
-So, taking the BTC hash rate as reasonable limit of human capabilities, the times to crack would be now as follows:
+So, taking the BTC hash rate as reasonable limit of human capabilities, the times to crack would be now as follows (assuming 3e5 words dictionary):
+
 
 <table>
-<tr><th>Words <th>Keyspace <th>Time at 2 GH/s <th>Time at 3.5e17 H/s
-<tr><td>2 <td>9.00e+10 <td>40 sec <td>0
-<tr><td>3 <td>2.70e+16 <td>141 days <td>0
-<tr><td>4 <td>8.10e+21 <td>116k years <td>6 sec
-<tr><td>5 <td>2.43e+27 <td>3e10 years <td>220 years
-<tr><td>6 <td>7.29e+32 <td>1e16 years <td>6e7 years
+<tr><th>Words <th>Keyspace <th>Time to crack (s) <td>Difficulty 
+<tr><td>2 <td>9.00e+10 <td>2.57e-07 <td>seconds
+<tr><td>3 <td>2.70e+16 <td>7.71e-02 <td>seconds
+<tr><td>4 <td>8.10e+21 <td>2.31e+04 <td>hours
+<tr><td>5 <td>2.43e+27 <td>6.94e+09 <td>hundreds of years
+<tr><td>6 <td>7.29e+32 <td>2.08e+15 <td>thousands of years
+<tr><td>7 <td>2.19e+38 <td>6.25e+20 <td>thousands of years
+<tr><td>8 <td>6.56e+43 <td>1.87e+26 <td>thousands of years
+<tr><td>9 <td>1.97e+49 <td>5.62e+31 <td>thousands of years
 </table>
+
 
 The problem with longer passphrases is human ability to remember them. While humans can easily remember even long text
 because of the semantic links between the words, what we're looking for is exactly opposite: words that are completely
@@ -187,8 +192,8 @@ randomly chosen. So just increasing number of words in passphrase doesn't seem l
 To render the dictionary attacks useless this generator applies **transformations** to the dictionary words.
 Currently there are two of them:
 
-* injection of non-dictionary characters (digits, punctuation etc)
 * case switching
+* injection of non-dictionary characters (digits, punctuation etc)
 
 The transformations are applied randomly: i.e. each character in the whole passphrase can be modified by each of them.
 The parameters are set so that it's almost certain that out of every 10 characters at least one will be most likely modified.
@@ -198,6 +203,20 @@ The parameters are set so that it's almost certain that out of every 10 characte
     Wood alcohol on %he table
     wood a9cohol on the table
 
-Average word length in this dictionary is 12 characters. In each word any character can now switch case (13 variants) and
-become replaced by a special character (169 variants) so this now inflates <!-- 13*13*38 --> the dictionary from 3e5 words to 2e9 words.
-Keyspace for 3 word passphrase becomes now 8e27 with exhaustive search time of 700 years with the assumed hash rate.
+The case switching transformation adds as many variants as many characters there are in each word (on average words in the dictionary
+are 12 characters). The character injection  multiplies the number of variants by word length and number of special characters (38). This adds almost
+5500 variants to each word in the dictionary.
+
+The dictionary of 300'000 words used in examples above is inflated to estimated 1.6e9 and the crack times grow accordingly:
+
+<table>
+<tr><th>Words <th>Keyspace <th>Time to crack (s) <td>Difficulty 
+<tr><td>2 <td>5.78e+14 <td>1.65e-03 <td>seconds
+<tr><td>3 <td>1.73e+20 <td>4.95e+02 <td>minutes
+<tr><td>4 <td>5.20e+25 <td>1.49e+08 <td>years
+<tr><td>5 <td>1.56e+31 <td>4.46e+13 <td>thousands of years
+<tr><td>6 <td>4.68e+36 <td>1.34e+19 <td>thousands of years
+<tr><td>7 <td>1.40e+42 <td>4.01e+24 <td>thousands of years
+<tr><td>8 <td>4.21e+47 <td>1.20e+30 <td>thousands of years
+<tr><td>9 <td>1.26e+53 <td>3.61e+35 <td>thousands of years
+</table>
