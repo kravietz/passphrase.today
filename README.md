@@ -199,10 +199,10 @@ Currently there are two of them:
 The transformations are applied randomly: i.e. each character in the whole passphrase can be modified by each of them.
 The parameters are set so that it's almost certain that out of every 10 characters at least one will be most likely modified.
 
-    wOod5alcohol on the table
-    wood alc[hOl on the table
-    Wood alcohol on %he table
-    wood a9cohol on the table
+    W2ood alcohol on the table
+    wood Alcohol on the t7able
+    3wood alcohol on the table
+    Wood alcoh*ol on the table
 
 The case switching transformation adds as many variants as many characters there are in each word (on average words in the dictionary
 are 12 characters). The character injection  multiplies the number of variants by word length and number of special characters (38). This adds almost
