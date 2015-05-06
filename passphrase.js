@@ -51,46 +51,61 @@ function PassGen(/** Object */ d, /** string */ id) {
     }
 }
 
-// actual passphrase generation routine
-// append random words until the resulting
-// passphrase meets the entropy target
+
+/**
+ * Generate a passphrase by outputting random words until the whole string satisfies the
+ * entropy requirement
+ * @return {Passphrase}
+ */
 PassGen.prototype.gen = function () {
     var passArray = [];
+    var dict_size = this.d.dictionary_size;
     do {
-        passArray.push(this.d.dictionary[this.nist.getRange(this.d.dictionary_size)]);
+        var random_index = this.nist.getRange(dict_size);
+        var random_word = this.d.dictionary[random_index];
+        passArray.push(random_word);
     } while (this.ee.getMinEntropy(passArray) < this.target_entropy);
     return new Passphrase(passArray);
 };
 
-// transform a dictionary-based passphrase
-// by randomly modifying the words
+/**
+ * Transform a Passphrase object by introducing random modifications in the component words.
+ * @param pass {Passphrase}
+ * @returns {Passphrase}
+ */
 PassGen.prototype.transform = function (pass) {
     var mutations_applied = [false, false];
-    var newWordsArray = [];
 
-    for (var i = 0; i < pass.length; i++) {
-        var word = pass.words[i];
-        var newWord = [];
-        for (var j = 0; j < word.length; j++) {
-            var ch = word[j];
+    while(mutations_applied[0] == false || mutations_applied[1] == false) {
+        var newWordsArray = [];
+        for (var i = 0; i < pass.length; i++) {
+            var word = pass.words[i];
+            var newWord = [];
+            for (var j = 0; j < word.length; j++) {
+                var ch = word[j];
 
-            if (!mutations_applied[0] && this.nist.getRange(1000) < 100) {
-                ch = (ch.toUpperCase() === ch) ? ch.toLowerCase() : ch.toUpperCase();
-                mutations_applied[0] = true;
+                if (!mutations_applied[0] && this.nist.getRange(1000) < 100) {
+                    // replace with case toggled
+                    ch = (ch.toUpperCase() === ch) ? ch.toLowerCase() : ch.toUpperCase();
+                    mutations_applied[0] = true;
+                }
+                if (!mutations_applied[1] && this.nist.getRange(1000) < 100) {
+                    // inject special char instead of replacing
+                    newWord.push(SPECIAL_CHARS[this.nist.getRange(SPECIAL_CHARS.length)]);
+                    mutations_applied[1] = true;
+                }
+
+                newWord.push(ch);
             }
-            if (!mutations_applied[1] && this.nist.getRange(1000) < 100) {
-                ch = SPECIAL_CHARS[this.nist.getRange(SPECIAL_CHARS.length)];
-                mutations_applied[1] = true;
-            }
-
-            newWord.push(ch);
+            newWordsArray.push(newWord.join(''));
         }
-        newWordsArray.push(newWord.join(''));
     }
     return new Passphrase(newWordsArray);
 };
 
-// reduce target entropy by 1
+/**
+ * Reduce generator's entropy target.
+ */
 PassGen.prototype.less = function () {
     if (this.target_entropy > 1) {
         this.target_entropy -= ENTROPY_STEP;
@@ -100,7 +115,9 @@ PassGen.prototype.less = function () {
     }
 };
 
-// increase target entropy
+/**
+ * Increase generator's entropy target.
+ */
 PassGen.prototype.more = function () {
     this.target_entropy += ENTROPY_STEP;
     if ('localStorage' in window) {
@@ -108,7 +125,10 @@ PassGen.prototype.more = function () {
     }
 };
 
-// insert the generated passphrase into HTML block
+/**
+ * Insert a passphrase into a HTML block.
+ * @param pass {Passphrase}
+ */
 PassGen.prototype.insert = function (pass) {
     // actually output the passphrase into the target field
     var pass_str = pass.toString();

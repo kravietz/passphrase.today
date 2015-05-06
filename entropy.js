@@ -48,18 +48,18 @@ EntropyEstimator.prototype.getCrackTime = function (pass) {
     var words_in_passphrase = pass.length;
     keyspace_as_words_bn = keyspace_as_words_bn.power(words_in_passphrase);
 
-    //
-    var crack_time_seconds = keyspace_as_words_bn / hash_rate_bn;
-
-    return crack_time_seconds;
+    // return estimated time to crack
+    return keyspace_as_words_bn / hash_rate_bn;
 };
 
 /**
- *
- * @param crack_time_seconds
+ * Estimate cracking time in words.
+ * @param pass {Object}
  * @returns {string}
  */
-EntropyEstimator.prototype.getCrackTimeText = function (crack_time_seconds) {
+EntropyEstimator.prototype.getCrackTimeText = function (pass) {
+    var crack_time_seconds = this.getCrackTime(pass);
+
     var ret = "seconds";
 
     if (crack_time_seconds > 60) {
