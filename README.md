@@ -62,9 +62,10 @@ Let's take one generated passphrase as a sample:
 
     wood alcohol on the table
     
-It looks funny, but it's really only composed from **two** tokens as the dictionary also contains
-short phrases (`wood alcohol` and `on the table` in this case). Applying the entropy
-estimation algorithms will give the following results>
+Apart from sounding rather scary (methanol is [highly poisonous](https://en.wikipedia.org/wiki/Methanol#Toxicity)) it also looks
+like a natural sentence. It's because it's really only composed of **two** tokens
+&mdash; the dictionary contains not only single words, but also short phrases (`wood alcohol` and `on the table` in this case).
+Now, applying the entropy estimation algorithms gives the following results:
 
 <table>
 <tr><th>Method <th>Entropy <th>Notes
@@ -171,7 +172,7 @@ So, taking the BTC hash rate as reasonable limit of human capabilities, the time
 
 
 <table>
-<tr><th>Words <th>Keyspace <th>Time to crack (s) <td>Difficulty 
+<tr><th>Words <th>Keyspace <th>Time to crack (s) <th>Difficulty 
 <tr><td>2 <td>9.00e+10 <td>2.57e-07 <td>seconds
 <tr><td>3 <td>2.70e+16 <td>7.71e-02 <td>seconds
 <tr><td>4 <td>8.10e+21 <td>2.31e+04 <td>hours
@@ -210,7 +211,7 @@ are 12 characters). The character injection  multiplies the number of variants b
 The dictionary of 300'000 words used in examples above is inflated to estimated 1.6e9 and the crack times grow accordingly:
 
 <table>
-<tr><th>Words <th>Keyspace <th>Time to crack (s) <td>Difficulty 
+<tr><th>Words <th>Keyspace <th>Time to crack (s) <th>Difficulty 
 <tr><td>2 <td>5.78e+14 <td>1.65e-03 <td>seconds
 <tr><td>3 <td>1.73e+20 <td>4.95e+02 <td>minutes
 <tr><td>4 <td>5.20e+25 <td>1.49e+08 <td>years
