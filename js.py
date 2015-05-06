@@ -27,8 +27,8 @@ var dictionary = {{
     alphabet_size: {alphabet_size},
     dictionary_size: {dictionary_size},
     entropy_per_word: {entropy_per_word},
-    alphabet_frequencies: {alphabet_frequencies},
     avg_word_len: {avg_word_len},
+    alphabet_frequencies: {alphabet_frequencies},
     dictionary: {dictionary},
 }}
 """
