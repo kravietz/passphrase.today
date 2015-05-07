@@ -70,11 +70,11 @@ function loadDictionary(/** string */ lang) {
             // unhide passphrase field
             document.getElementById('output').hidden = false;
 
-            // export for the inline HTML calls
-            window['pp'] = new PassGen(dictionary, 'output');
+            // init the PassGen with new dictionary
+            window.pp = new PassGen(dictionary, 'output');
             outputNewPassphrase();
 
-            // clean up
+            // clean up in DOM
             script.onload = script.onreadystatechange = null;
             head.removeChild(script);
 
@@ -104,7 +104,10 @@ function loadDictionary(/** string */ lang) {
 }
 
 // interactive function called from the HTML when user changes dictionary in the selection list
-window['switchDict'] = function() {
-    var lang = document.getElementById("lang").options[document.getElementById("lang").selectedIndex].value;
-    loadDictionary(lang);
-};
+function switchDictionary() {
+    var selected_lang = document.getElementById("lang").options[document.getElementById("lang").selectedIndex].value;
+    loadDictionary(selected_lang);
+}
+
+// bind event listener to the HTML form
+document.getElementById('lang').addEventListener('change', switchDictionary);

@@ -7,9 +7,9 @@
 /** @const */ var /** string */ LS_LANGUAGE= 'language';
 
 // placeholders
-window['dictionary'] = {};
-window['pp'] = {};
-window['pass'] = "";
+window['dictionary'] = {}; // export for Closure
+window.pp = {};
+window.pass = "";
 
 function toggleAdvanced() {
     var e = document.getElementById('advanced');
@@ -17,26 +17,26 @@ function toggleAdvanced() {
 }
 
 function outputNewPassphrase() {
-    window['pass'] = window['pp'].gen();
-    window['pp'].insert(window['pp'].transform(window['pass']));
+    window.pp = window.pp.gen();
+    window.pp.insert(window.pp.transform(window.pass));
 }
 
 function outputNewTransform() {
-    window['pp'].insert(window['pp'].transform(window['pass']));
+    window.pp.insert(window.pp.transform(window.pass));
 }
 
 function lessEntropy() {
-    window['pp']['less']();
+    window.pp.less();
     outputNewPassphrase();
 }
 
 function moreEntropy() {
-    window['pp']['more']();
+    window.pp.more();
     outputNewPassphrase();
 }
 
 function start() {
-    // framebuster
+    // frame buster
     if (self == top) {
         console.log('main view enabled');
         document.documentElement.style.display = 'block';
@@ -45,10 +45,10 @@ function start() {
         top.location = self.location;
     }
 
-    window['sjcl']['random']['startCollectors']();
+    window['sjcl']['random']['startCollectors'](); // export for Closure
 
     // ensure PRNG is working
-    if (window['sjcl']['random']['isReady']()) {
+    if (window['sjcl']['random']['isReady']()) { // export for Closure
 
         var lang;
         if ('localStorage' in window) {
