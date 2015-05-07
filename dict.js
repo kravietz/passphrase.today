@@ -72,6 +72,7 @@ function loadDictionary(/** string */ lang) {
 
             // init the PassGen with new dictionary
             window.pp = new PassGen(dictionary, 'output');
+            window.ee = new EntropyEstimator(dictionary);
             outputNewPassphrase();
 
             // clean up in DOM

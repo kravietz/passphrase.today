@@ -6,9 +6,11 @@
 
 /** @const */ var /** string */ LS_LANGUAGE= 'language';
 
+// export for Closure, initialised in dict.js
+window['dictionary'] = {};
 // placeholders
-window['dictionary'] = {}; // export for Closure
 window.pp = {};
+window.ee = {};
 window.pass = "";
 
 function toggleAdvanced() {
