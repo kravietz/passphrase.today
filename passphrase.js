@@ -27,9 +27,6 @@ function Passphrase(/** ?Array<string> */ words) {
 Passphrase.prototype.toString = function () {
     return this.words.join(' ');
 };
-Passphrase.prototype.toHtml = function () {
-    return this.words.join('&nbsp;');
-};
 
 /**
  * Passphrase generator class. Uses dictionary to generate
@@ -69,14 +66,48 @@ PassGen.prototype.gen = function () {
 };
 
 /**
+ * List of currently implemented passphrase transformation methods. Each method
+ * supplies information on provided variants (for complexity assessment) and
+ * and actual transformation function.
+ * @type {*[]}
+ */
+PassGen.prototype.transform_methods = [
+    {   // switch case
+        variants: function () {
+            return this.d.avg_word_len;
+        },
+        method:     function (ch) {
+            this.done = true;
+            return (ch.toUpperCase() == ch) ? ch.toLowerCase() : ch.toUpperCase();
+        },
+        done: false
+    },
+    {   // insert special char
+        variants: function () {
+            return this.d.avg_word_len * SPECIAL_CHARS.length;
+        },
+        method:     function (ch) {
+            var rand_index = this.nist.getRange(SPECIAL_CHARS.length);
+            var insert_char = SPECIAL_CHARS[rand_index];
+            this.done = true;
+            return ch + insert_char;
+        },
+        done: false,
+        nist: null // will be installed by transform() loop
+    }
+];
+
+
+/**
  * Transform a Passphrase object by introducing random modifications in the component words.
  * @param pass {Passphrase}
  * @returns {Passphrase}
  */
 PassGen.prototype.transform = function (pass) {
-    var mutations_applied = [false, false];
+    var applied = 0;
 
-    while(mutations_applied[0] == false || mutations_applied[1] == false) {
+    // apply transforms until each of them is applied once
+    while(applied < this.transform_methods.length) {
         var newWordsArray = [];
         for (var i = 0; i < pass.length; i++) {
             var word = pass.words[i];
@@ -84,21 +115,28 @@ PassGen.prototype.transform = function (pass) {
             for (var j = 0; j < word.length; j++) {
                 var ch = word[j];
 
-                if (!mutations_applied[0] && this.nist.getRange(1000) < 100) {
-                    // replace with case toggled
-                    ch = (ch.toUpperCase() === ch) ? ch.toLowerCase() : ch.toUpperCase();
-                    mutations_applied[0] = true;
-                }
-                if (!mutations_applied[1] && this.nist.getRange(1000) < 100) {
-                    // inject special char instead of replacing
-                    newWord.push(SPECIAL_CHARS[this.nist.getRange(SPECIAL_CHARS.length)]);
-                    mutations_applied[1] = true;
+                for(var m=0; m<this.transform_methods.length; m++) {
+                    var method = this.transform_methods[m];
+                    method.nist = this.nist;
+                    if ('done' in method && method.done == true) {
+                        applied += 1;
+                    } else {
+                        // there's 0.5% chance that given transformation kicks in
+                        // on each character in each run
+                        if (this.nist.getRange(1000) < 50) {
+                            ch = method.method(ch);
+                        }
+                    }
                 }
 
                 newWord.push(ch);
             }
             newWordsArray.push(newWord.join(''));
         }
+    }
+    // clean up
+    for(m=0; m<this.transform_methods.length; m++) {
+        this.transform_methods[m].done = false;
     }
     return new Passphrase(newWordsArray);
 };
@@ -136,7 +174,7 @@ PassGen.prototype.insert = function (pass) {
     // actually insert the passphrase string
     output.textContent = pass_str;
     // rescale to fit without scrolling
-    output.rows = Math.ceil(pass_str.length/output.cols) + 1;
+    output.rows = Math.ceil(pass_str.length/output.cols);
 
     document.getElementById('pp-target-entropy').textContent = this.target_entropy;
     var p = document.getElementById('pp-character-entropy');
