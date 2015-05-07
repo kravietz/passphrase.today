@@ -17,7 +17,7 @@ function toggleAdvanced() {
 }
 
 function outputNewPassphrase() {
-    window.pp = window.pp.gen();
+    window.pass = window.pp.gen();
     window.pp.insert(window.pp.transform(window.pass));
 }
 
