@@ -11,6 +11,10 @@ html {
     margin-left: 10px;
 }
 
+#output {
+    width: 50%;
+    text-align: center;
+}
 
 #output-wrapper {
     font-family: monospace;
