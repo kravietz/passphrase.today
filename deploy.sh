@@ -31,7 +31,7 @@ if [ ! -d sjcl ]; then
 fi
 
 if [ ! -f dict/english.js ]; then
-    python3 js.py
+    python3 make_dictionaries.py
 fi
 
 FONTS="Essays1743-bold-italic.eot Essays1743-bold-italic.ttf Essays1743-bold-italic.woff Essays1743-bold.eot Essays1743-bold.ttf Essays1743-bold.woff Essays1743-italic.eot Essays1743-italic.ttf Essays1743-italic.woff Essays1743.eot Essays1743.ttf Essays1743.woff"
@@ -81,7 +81,7 @@ cp dict/*.js ${output}/dict/
 
 # compile and optimize JS
 java -jar compiler.jar \
-    --js {entropy,passphrase,random,titles,dict,app}.js \
+    --js {entropy,random,passphrase,titles,dict,app}.js \
     --third_party \
     --compilation_level SIMPLE \
     --charset UTF8 \
