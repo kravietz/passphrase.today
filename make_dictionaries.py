@@ -15,7 +15,7 @@ RE_MW = '^([^\$\'-].+)'  # for Moby Words, just skip the initial -endings
 
 DICTS = {
     'Russian': ['http://cgit.freedesktop.org/libreoffice/dictionaries/plain/ru_RU/ru_RU.dic', 'koi8_r', RE_DIC],
-    'English': ['https://raw.githubusercontent.com/GlitchHound/TinyTeam/master/mwords/256772co.mpo', 'ascii', RE_MW],
+    'English': ['https://github.com/benkasminbullock/Moby/raw/master/mwords/354984si.ngl', 'ascii', RE_MW],
     'Polish': ['http://cgit.freedesktop.org/libreoffice/dictionaries/plain/pl_PL/pl_PL.dic', 'iso8859_2', RE_DIC],
 }
 
