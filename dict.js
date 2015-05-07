@@ -102,12 +102,3 @@ function loadDictionary(/** string */ lang) {
     // actually inject the tag
     head.insertBefore(script, head.firstChild);
 }
-
-// interactive function called from the HTML when user changes dictionary in the selection list
-function switchDictionary() {
-    var selected_lang = document.getElementById("lang").options[document.getElementById("lang").selectedIndex].value;
-    loadDictionary(selected_lang);
-}
-
-// bind event listener to the HTML form
-document.getElementById('lang').addEventListener('change', switchDictionary);

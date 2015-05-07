@@ -35,6 +35,12 @@ function moreEntropy() {
     outputNewPassphrase();
 }
 
+// uses dict.js
+function switchDictionary() {
+    var selected_lang = document.getElementById("lang").options[document.getElementById("lang").selectedIndex].value;
+    loadDictionary(selected_lang);
+}
+
 function start() {
     // frame buster
     if (self == top) {
@@ -82,6 +88,8 @@ function start() {
     document.getElementById('new-trans-element').addEventListener('click', outputNewTransform);
     document.getElementById('less-entropy-element').addEventListener('click', lessEntropy);
     document.getElementById('more-entropy-element').addEventListener('click', moreEntropy);
+
+    document.getElementById('lang').addEventListener('change', switchDictionary);
 }
 
 // actually start the application
