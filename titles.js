@@ -32,8 +32,8 @@ var /** string */ msg4 = ['This is the minimum entropy threshold for the generat
     ' any passphrase candidate lower than that is discarded.'
 ];
 /** @const */
-var /** string */ msg5 = ['This is an estimated order of magnitude of time needed to crack',
-    ' this passphrase using dictionary attack at global Bitcoin hash rate.'
+var /** string */ msg5 = ['Hypothetically, if someone could apply current Bitcoin hash power',
+    ' how long would it take to crack this passphrase?'
 ];
 
 var titles = {
