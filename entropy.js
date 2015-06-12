@@ -7,12 +7,18 @@
 /** @const */ var /** string */ BLOCKCHAIN_STATS_URL = 'https://blockchain.info/q/hashrate';
 /** @const */ var /** string */ LS_HASH_RATE = 'blockchain_hash_rate';
 /** @const */ var /** string */ LS_HASH_RATE_TIMESTAMP = 'blockchain_hash_rate_timestamp';
-/** @const */ var /** Array<number> */ NIST_MAP = [4, 2, 2, 2, 2, 2, 2, 2, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5];
+
 /**
- * If on-line hash rate is unreachable we use default value which was recorded on
- * 5 May 2015
+ * Entropy estimates per character position as in NIST SP800-63, pp 49-50. Intended to estimate
+ * entropy of natural language words.
  */
-/** @const */ var /** float */ DEFAULT_HASH_RATE = 3.457814595843686E8;
+/** @const */ var /** Array<number> */ NIST_MAP = [4, 2, 2, 2, 2, 2, 2, 2, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5];
+
+/**
+ * If on-line BitCoin hash rate is unreachable we use default value which is the maximum
+ * value seen on 18 May 2015 at https://blockchain.info/q/hashrate
+ */
+/** @const */ var /** float */ DEFAULT_HASH_RATE = 4.19E8;
 
 /**
  * Estimates entropy of passphrase given the dictionary used to generate it.
@@ -42,52 +48,58 @@ EntropyEstimator.prototype.getCrackTime = function (pass) {
     hash_rate_bn = hash_rate_bn.mul(1e9);
 
     // keyspace when cracking as combination of dictionary words
+    var keyspace_bn = new sjcl.bn;
+    keyspace_bn.initWith(this.dictionary.dictionary_size);
+
+    // apply transforms contribution to keyspace
+    for(var i=0; i<pass.transforms.length; i++) {
+        keyspace_bn = keyspace_bn.mul(pass.transforms[i]);
+    }
+
     // keyspace = keyspace ** words_in_passphrase
-    var keyspace_as_words_bn = new sjcl.bn;
-    keyspace_as_words_bn.initWith(this.dictionary.dictionary_size);
     var words_in_passphrase = pass.length;
-    keyspace_as_words_bn = keyspace_as_words_bn.power(words_in_passphrase);
+    keyspace_bn = keyspace_bn.power(words_in_passphrase);
 
     // return estimated time to crack
-    return keyspace_as_words_bn / hash_rate_bn;
+    return keyspace_bn / hash_rate_bn;
 };
+
+EntropyEstimator.prototype.crackTimeRanges = [
+    {"seconds": 0, "word": "instant", "class": "alert alert-danger"},
+    {"seconds": 1, "word": "seconds", "class": "alert alert-danger"},
+    {"seconds": 60, "word": "minutes", "class": "alert alert-danger"},
+    {"seconds": 3600, "word": "hours", "class": "alert alert-danger"},
+    {"seconds": 3600 * 24, "word": "days", "class": "alert alert-danger"},
+    {"seconds": 3600 * 24 * 30, "word": "months", "class": "alert alert-warning"},
+    {"seconds": 3600 * 24 * 365, "word": "years", "class": "alert alert-warning"},
+    {"seconds": 3600 * 24 * 365 * 10, "word": "decades", "class": "alert alert-success"},
+    {"seconds": 3600 * 24 * 365 * 100, "word": "centuries", "class": "alert alert-success"},
+    {"seconds": 3600 * 24 * 365 * 1000, "word": "millenia", "class": "alert alert-success"}
+];
 
 /**
  * Estimate cracking time in words.
  * @param pass {Object}
+ * @param type {string} "word" or "class"
  * @returns {string}
  */
-EntropyEstimator.prototype.getCrackTimeText = function (pass) {
+EntropyEstimator.prototype.getCrackTimeText = function (pass, type) {
     var crack_time_seconds = this.getCrackTime(pass);
+    var match = this.crackTimeRanges[0];
 
-    var ret = "seconds";
-
-    if (crack_time_seconds > 60) {
-        ret = "minutes";
-    }
-    if (crack_time_seconds > 3600) {
-        ret = "hours";
-    }
-    if (crack_time_seconds > 3600*24) {
-        ret = "days";
-    }
-    if (crack_time_seconds > 3600*24*30) {
-        ret = "months";
-    }
-    if (crack_time_seconds > 3600*24*365) {
-        ret = "years";
-    }
-    if (crack_time_seconds > 3600*24*365*10) {
-        ret = "tens of years";
-    }
-    if (crack_time_seconds > 3600*24*365*100) {
-        ret = "hundreds of years";
-    }
-    if (crack_time_seconds > 3600*24*365*1000) {
-        ret = "thousands of years";
+    for(var i=0; i<this.crackTimeRanges.length; i++) {
+        var range = this.crackTimeRanges[i];
+        if(crack_time_seconds > range.seconds) {
+            match = range;
+        }
     }
 
-    return ret;
+    if (type == "word") {
+        return match.word;
+    } else {
+        return match['class'];
+    }
+
 };
 
 /**
