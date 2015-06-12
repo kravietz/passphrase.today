@@ -22,14 +22,14 @@ function outputNewPassphrase() {
     // generate & output new passphrase
     // keep it global so that pass doesn't change when cycling transformations
     window.pass = window.pp.gen();
-    var transformed = window.pp.transform(window.pass);
-    insertPassphrase(transformed);
+    window.transformed = window.pp.transform(window.pass);
+    insertPassphrase(window.transformed);
 }
 
 function outputNewTransform() {
     // generate new transformation of the existing passphrase
-    var new_transformed = window.pp.transform(window.pass);
-    insertPassphrase(new_transformed);
+    window.transformed = window.pp.transform(window.pass);
+    insertPassphrase(window.transformed);
 }
 
 function insertPassphrase(pass) {
