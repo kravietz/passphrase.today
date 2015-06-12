@@ -58,7 +58,7 @@ function insertPassphrase(pass) {
     p.textContent = window.ee.getCrackTimeText(window.pass, "word");
     p.setAttribute('class', window.ee.getCrackTimeText(window.pass, "class"));
     var time_to_crack_detailed = window.ee.getCrackTime(window.pass);
-    p.setAttribute('title', time_to_crack_detailed.toString());
+    p.setAttribute('title', time_to_crack_detailed.toString() + ' seconds');
 
     document.getElementById('pp-target-entropy').textContent = window.pp.target_entropy;
 }
