@@ -60,28 +60,29 @@ the resistance to  brute-force guessing all character combinations and tends to 
 
 Let's take one generated passphrase as a sample:
 
-    wood alcohol on the table
+    wood alcohol
     
-Apart from sounding rather scary (methanol is [highly poisonous](https://en.wikipedia.org/wiki/Methanol#Toxicity)) it also looks
-like a natural sentence. It's because it's really only composed of **two** tokens
-&mdash; the dictionary contains not only single words, but also short phrases (`wood alcohol` and `on the table` in this case).
-Now, applying the entropy estimation algorithms gives the following results:
+Remember, methanol is [highly poisonous](https://en.wikipedia.org/wiki/Methanol#Toxicity)! Apart from that it's
+rather typical passphrase composed of two words. Now, applying the entropy estimation algorithms gives
+the following results:
 
 <table>
-<tr><th>Method <th>Entropy <th>Notes
-<tr><td>Shannon word <td>36 <td>2 tokens
-<tr><td>NIST <td>41 <td>25 characters, decreasing entropy per char
-<tr><td>Shannon char <td>115 <td>25 chars but different formula
+<tr><th>Method <th>Entropy <th>Details
+<tr><td>Shannon word <td>36 <td>The passphrase has 2  words and each word in this dictionary on average provides 18.44  bits of entropy
+<tr><td>NIST <td>24 <td>12 characters, decreasing entropy per char
+<tr><td>Shannon char <td>50 <td>The passphrase has 12  characters and each character in this dictionary provides on average  4.21  bits of entropy
 </table>
 
-This passphrase passes the minimum 35 bits of entropy threshold and is thus presented to the user as a candidate. To make
-things simpler, *this* example doesn't use the transformations described below.
+To make things simpler, *this* example doesn't use the transformations described below. It also wouldn't pass the default
+entropy threshold set at 35 bits - the estimator will look at the lowest value, which is 24 by the NIST algorithm. This passphrase
+wouldn't be thus presented to the user and the generator would continue to produce new candidates until a stronger one is found.
 
 ## Brute-force attacks
 
 Treating the passphrase as a string of characters and applying a brute-force guessing attack won't be in most cases
-feasible because the passphrases tend to be longer than typical passwords. The sample passphrase `wood alcohol...` 
-is 25 characters long and let's assume for simplicity it's built from an alphabet of only 26 characters (`a-z` and space).
+feasible because the passphrases tend to be longer than typical passwords. Take a sample passphrase of
+`wood alcohol on the table` (longer than the previous example): it's 25 characters long and let's assume for simplicity
+it's built from an alphabet of only 26 characters (`a-z` and space).
 This gives a keyspace of 2e35 (<!-- 26**25 -->). Then, let's assume we can employ the
 [current Bitcoin hash rate](https://blockchain.info/charts/hash-rate) to crack
 passwords (which is around 3.5e17 in Q2 2015). This gives around 1e10 years <!-- 26**25/3.5e17/3600/24/365  --> to
@@ -221,3 +222,4 @@ The dictionary of 300'000 words used in examples above is inflated to estimated 
 <tr><td>8 <td>4.21e+47 <td>1.20e+30 <td>thousands of years
 <tr><td>9 <td>1.26e+53 <td>3.61e+35 <td>thousands of years
 </table>
+
