@@ -189,8 +189,16 @@ EntropyEstimator.prototype.getNist = function (pass) {
     }
 
     // map entropies to password chars and sum
-    var sum = 0;
-    for (i = 0; i < passText.length; i++) sum += this.nistMap[i];
+    var sum = 0.0;
+    var j = 0;
+    for (i = 0; i < passText.length; i++) {
+        if(passText[i] == ' ') {
+            j = 0;
+        } else {
+            j = i;
+        }
+        sum += this.nistMap[j];
+    }
 
     // bonus for uppercase characters
     if (passText !== passText.toLowerCase()) {
