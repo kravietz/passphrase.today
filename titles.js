@@ -31,12 +31,17 @@ var /** string */ msg4 = ['This is the minimum entropy threshold for the generat
     ' The lowest of the entropy estimates is compared against this limit and ',
     ' any passphrase candidate lower than that is discarded.'
 ];
+/** @const */
+var /** string */ msg5 = ['This is an estimated order of magnitude of time needed to crack',
+    ' this passphrase using dictionary attack at global Bitcoin hash rate.'
+];
 
 var titles = {
     'pp-word-entropy-title': msg1.join(' '),
     'pp-nist-entropy-title': msg2.join(' '),
     'pp-character-entropy-title': msg3.join(' '),
-    'pp-target-entropy-title': msg4.join(' ')
+    'pp-target-entropy-title': msg4.join(' '),
+    'pp-cracking-time-title': msg5.join(' ')
 };
 
 // actually add these long ugly titles to the page
