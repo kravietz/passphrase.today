@@ -44,21 +44,23 @@ EntropyEstimator.prototype.getMinEntropy = function (pass) {
 EntropyEstimator.prototype.getCrackTime = function (pass) {
     var hash_rate_bn = new sjcl.bn;
     hash_rate_bn.initWith(Math.ceil(this.getHashRate()));
-    // nominal hash rate is in Gh/s, normalize to h/s
+    // nominal hash rate is in Ghash/s, normalize to hash/s
     hash_rate_bn = hash_rate_bn.mul(1e9);
 
-    // keyspace when cracking as combination of dictionary words
+    // calculate the keyspace for cracking as combination of dictionary words
     var keyspace_bn = new sjcl.bn;
     keyspace_bn.initWith(this.dictionary.dictionary_size);
-
-    // apply transforms contribution to keyspace
-    for(var i=0; i<pass.transforms.length; i++) {
-        keyspace_bn = keyspace_bn.mul(pass.transforms[i]);
-    }
-
     // keyspace = keyspace ** words_in_passphrase
     var words_in_passphrase = pass.length;
     keyspace_bn = keyspace_bn.power(words_in_passphrase);
+    console.log('Keyspace before transform', keyspace_bn.toString());
+
+    // apply transforms contribution to keyspace
+    for(var i=0; i<pass.transforms.length; i++) {
+        console.log('Applying transform', pass.transforms[i]);
+        keyspace_bn = keyspace_bn.mul(pass.transforms[i]);
+    }
+    console.log('Keyspace after transform ', keyspace_bn.toString());
 
     // return estimated time to crack
     return keyspace_bn / hash_rate_bn;

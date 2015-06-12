@@ -32,9 +32,9 @@ function outputNewTransform() {
     insertPassphrase(window.transformed);
 }
 
-function insertPassphrase(pass) {
+function insertPassphrase(passphrase) {
     // actually output the passphrase into the target field
-    var pass_str = pass.toString();
+    var pass_str = passphrase.toString();
     var output = document.getElementById('output');
     // actually insert the passphrase string
     output.textContent = pass_str;
@@ -43,21 +43,21 @@ function insertPassphrase(pass) {
 
     // update stats
     var p = document.getElementById('pp-character-entropy');
-    p.textContent = window.ee.getShannon(window.pass).toFixed(2);
-    p.setAttribute('title', window.ee.getShannonExplain(window.pass));
+    p.textContent = window.ee.getShannon(passphrase).toFixed(2);
+    p.setAttribute('title', window.ee.getShannonExplain(passphrase));
 
     p = document.getElementById('pp-nist-entropy');
-    p.textContent = window.ee.getNist(window.pass).toFixed(2);
-    p.setAttribute('title', window.ee.getNistExplain(window.pass));
+    p.textContent = window.ee.getNist(passphrase).toFixed(2);
+    p.setAttribute('title', window.ee.getNistExplain(passphrase));
 
     p = document.getElementById('pp-word-entropy');
-    p.textContent = window.ee.getWord(window.pass).toFixed(2);
-    p.setAttribute('title', window.ee.getWordExplain(window.pass));
+    p.textContent = window.ee.getWord(passphrase).toFixed(2);
+    p.setAttribute('title', window.ee.getWordExplain(passphrase));
 
     p = document.getElementById('pp-cracking-time');
-    p.textContent = window.ee.getCrackTimeText(window.pass, "word");
-    p.setAttribute('class', window.ee.getCrackTimeText(window.pass, "class"));
-    var time_to_crack_detailed = window.ee.getCrackTime(window.pass);
+    p.textContent = window.ee.getCrackTimeText(passphrase, "word");
+    p.setAttribute('class', window.ee.getCrackTimeText(passphrase, "class"));
+    var time_to_crack_detailed = window.ee.getCrackTime(passphrase);
     p.setAttribute('title', time_to_crack_detailed.toString() + ' seconds');
 
     document.getElementById('pp-target-entropy').textContent = window.pp.target_entropy;
