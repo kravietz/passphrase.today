@@ -23,9 +23,14 @@ function Passphrase(/** ?Array<string> */ words) {
 
     // word count
     this.length = this.words.length;
+    // for transformation variants information
+    this.transforms = [];
 }
 Passphrase.prototype.toString = function () {
     return this.words.join(' ');
+};
+Passphrase.prototype.setTransforms = function(/** ?Array<number> */ transforms) {
+    this.transforms = transforms;
 };
 
 /**
@@ -34,11 +39,9 @@ Passphrase.prototype.toString = function () {
  * by identifier id.
  * @constructor
  * @param {Object} d
- * @param {string} id
  */
-function PassGen(/** Object */ d, /** string */ id) {
+function PassGen(/** Object */ d) {
     this.d = d;     // dictionary
-    this.id = id;   // id of the target HTML element to insert the result
     this.target_entropy = DEFAULT_TARGET_ENTROPY;
     this.nist = new NistRandom;
     this.ee = new EntropyEstimator(this.d);
@@ -73,8 +76,8 @@ PassGen.prototype.gen = function () {
  */
 PassGen.prototype.transform_methods = [
     {   // switch case
-        variants: function () {
-            return this.d.avg_word_len;
+        variants: function (dictionary) {
+            return dictionary.avg_word_len;
         },
         method:     function (ch) {
             this.done = true;
@@ -83,8 +86,8 @@ PassGen.prototype.transform_methods = [
         done: false
     },
     {   // insert special char
-        variants: function () {
-            return this.d.avg_word_len * SPECIAL_CHARS.length;
+        variants: function (dictionary) {
+            return dictionary.avg_word_len * SPECIAL_CHARS.length;
         },
         method:     function (ch) {
             var rand_index = this.nist.getRange(SPECIAL_CHARS.length);
@@ -105,6 +108,7 @@ PassGen.prototype.transform_methods = [
  */
 PassGen.prototype.transform = function (pass) {
     var applied = 0;
+    var transforms = [];
 
     // apply transforms until each of them is applied once
     while(applied < this.transform_methods.length) {
@@ -125,6 +129,8 @@ PassGen.prototype.transform = function (pass) {
                         // on each character in each run
                         if (this.nist.getRange(1000) < 50) {
                             ch = method.method(ch);
+                            // add information on how many variants this method added
+                            transforms.push(method.variants(this.d));
                         }
                     }
                 }
@@ -138,7 +144,9 @@ PassGen.prototype.transform = function (pass) {
     for(m=0; m<this.transform_methods.length; m++) {
         this.transform_methods[m].done = false;
     }
-    return new Passphrase(newWordsArray);
+    var new_pass = new Passphrase(newWordsArray);
+    new_pass.setTransforms(transforms);
+    return new_pass;
 };
 
 /**
@@ -161,31 +169,4 @@ PassGen.prototype.more = function () {
     if ('localStorage' in window) {
         localStorage.setItem(LS_TARGET_ENTROPY, this.target_entropy);
     }
-};
-
-/**
- * Insert a passphrase into a HTML block.
- * @param pass {Passphrase}
- */
-PassGen.prototype.insert = function (pass) {
-    // actually output the passphrase into the target field
-    var pass_str = pass.toString();
-    var output = document.getElementById(this.id);
-    // actually insert the passphrase string
-    output.textContent = pass_str;
-    // rescale to fit without scrolling
-    output.rows = Math.ceil(pass_str.length/output.cols);
-
-    document.getElementById('pp-target-entropy').textContent = this.target_entropy;
-    var p = document.getElementById('pp-character-entropy');
-    p.textContent = this.ee.getShannon(pass).toFixed(2);
-    p.setAttribute('title', this.ee.getShannonExplain(pass));
-
-    p = document.getElementById('pp-nist-entropy');
-    p.textContent = this.ee.getNist(pass).toFixed(2);
-    p.setAttribute('title', this.ee.getNistExplain(pass));
-
-    p = document.getElementById('pp-word-entropy');
-    p.textContent = this.ee.getWord(pass).toFixed(2);
-    p.setAttribute('title', this.ee.getWordExplain(pass));
 };
