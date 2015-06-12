@@ -19,12 +19,48 @@ function toggleAdvanced() {
 }
 
 function outputNewPassphrase() {
+    // generate & output new passphrase
+    // keep it global so that pass doesn't change when cycling transformations
     window.pass = window.pp.gen();
-    window.pp.insert(window.pp.transform(window.pass));
+    var transformed = window.pp.transform(window.pass);
+    insertPassphrase(transformed);
 }
 
 function outputNewTransform() {
-    window.pp.insert(window.pp.transform(window.pass));
+    // generate new transformation of the existing passphrase
+    var new_transformed = window.pp.transform(window.pass);
+    insertPassphrase(new_transformed);
+}
+
+function insertPassphrase(pass) {
+    // actually output the passphrase into the target field
+    var pass_str = pass.toString();
+    var output = document.getElementById('output');
+    // actually insert the passphrase string
+    output.textContent = pass_str;
+    // rescale to fit without scrolling
+    output.rows = Math.ceil(pass_str.length/output.cols);
+
+    // update stats
+    var p = document.getElementById('pp-character-entropy');
+    p.textContent = window.ee.getShannon(window.pass).toFixed(2);
+    p.setAttribute('title', window.ee.getShannonExplain(window.pass));
+
+    p = document.getElementById('pp-nist-entropy');
+    p.textContent = window.ee.getNist(window.pass).toFixed(2);
+    p.setAttribute('title', window.ee.getNistExplain(window.pass));
+
+    p = document.getElementById('pp-word-entropy');
+    p.textContent = window.ee.getWord(window.pass).toFixed(2);
+    p.setAttribute('title', window.ee.getWordExplain(window.pass));
+
+    p = document.getElementById('pp-cracking-time');
+    p.textContent = window.ee.getCrackTimeText(window.pass, "word");
+    p.setAttribute('class', window.ee.getCrackTimeText(window.pass, "class"));
+    var time_to_crack_detailed = window.ee.getCrackTime(window.pass);
+    p.setAttribute('title', time_to_crack_detailed.toString());
+
+    document.getElementById('pp-target-entropy').textContent = window.pp.target_entropy;
 }
 
 function lessEntropy() {
