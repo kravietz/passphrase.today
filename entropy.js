@@ -37,34 +37,58 @@ EntropyEstimator.prototype.getMinEntropy = function (pass) {
 };
 
 /**
+ * Estimate key space for dictionary attack. Returns BN.
+ * @param pass {Object}
+ * @param transforms {boolean}
+ * @returns {Object}
+ */
+EntropyEstimator.prototype.getKeySpace = function (passphrase, transforms) {
+    // calculate the keyspace for cracking as combination of dictionary words
+    var keyspace_bn = new sjcl.bn;
+    keyspace_bn.initWith(this.dictionary.dictionary_size);
+    // keyspace = keyspace ** words_in_passphrase
+    var words_in_passphrase = passphrase.length;
+    keyspace_bn = keyspace_bn.power(words_in_passphrase);
+
+    // apply transforms contribution to keyspace
+    if (transforms) {
+        for (var i = 0; i < passphrase.transforms.length; i++) {
+            keyspace_bn = keyspace_bn.mul(passphrase.transforms[i]);
+        }
+    }
+
+    return keyspace_bn;
+};
+
+/**
  * Estimate time to crack using Bitcoin hash rate.
- * @param pass
+ * @param pass {Object}
  * @returns {number}
  */
-EntropyEstimator.prototype.getCrackTime = function (pass) {
+EntropyEstimator.prototype.getCrackTime = function (passphrase) {
     var hash_rate_bn = new sjcl.bn;
     hash_rate_bn.initWith(Math.ceil(this.getHashRate()));
     // nominal hash rate is in Ghash/s, normalize to hash/s
     hash_rate_bn = hash_rate_bn.mul(1e9);
 
-    // calculate the keyspace for cracking as combination of dictionary words
-    var keyspace_bn = new sjcl.bn;
-    keyspace_bn.initWith(this.dictionary.dictionary_size);
-    // keyspace = keyspace ** words_in_passphrase
-    var words_in_passphrase = pass.length;
-    keyspace_bn = keyspace_bn.power(words_in_passphrase);
-    console.log('Keyspace before transform', keyspace_bn.toString());
-
-    // apply transforms contribution to keyspace
-    for(var i=0; i<pass.transforms.length; i++) {
-        console.log('Applying transform', pass.transforms[i]);
-        keyspace_bn = keyspace_bn.mul(pass.transforms[i]);
-    }
-    console.log('Keyspace after transform ', keyspace_bn.toString());
+    var keyspace_bn = this.getKeySpace(passphrase, true);
 
     // return estimated time to crack
     return keyspace_bn / hash_rate_bn;
 };
+
+/**
+ *
+ * @param passphrase {Object}
+ * @returns {string}
+ */
+EntropyEstimator.prototype.getCrackTimeExplain = function (passphrase) {
+    return ['Keyspace with transforms is', this.getKeySpace(passphrase, true),
+            '(it would be ', this.getKeySpace(passphrase, false), 'without)',
+            'so at', this.getHashRate(), 'Ghash/sec it would take',
+            this.getCrackTime(passphrase), 'seconds to crack it.'].join(' ');
+};
+
 
 EntropyEstimator.prototype.crackTimeRanges = [
     {"seconds": 0, "word": "instant", "class": "alert alert-danger"},
@@ -89,9 +113,9 @@ EntropyEstimator.prototype.getCrackTimeText = function (pass, type) {
     var crack_time_seconds = this.getCrackTime(pass);
     var match = this.crackTimeRanges[0];
 
-    for(var i=0; i<this.crackTimeRanges.length; i++) {
+    for (var i = 0; i < this.crackTimeRanges.length; i++) {
         var range = this.crackTimeRanges[i];
-        if(crack_time_seconds > range.seconds) {
+        if (crack_time_seconds > range.seconds) {
             match = range;
         }
     }
@@ -127,7 +151,7 @@ EntropyEstimator.prototype.getHashRate = function () {
     }
 
     // if cached hash rate younger than 1 day, use the cached value
-    if (new Date() - this.hash_rate_timestamp < 60*60*24*1e3) {
+    if (new Date() - this.hash_rate_timestamp < 60 * 60 * 24 * 1e3) {
         return this.hash_rate;
     }
 
@@ -135,7 +159,7 @@ EntropyEstimator.prototype.getHashRate = function () {
     var req = new XMLHttpRequest();
 
     try {
-        req.open('GET', BLOCKCHAIN_STATS_URL, false /* synchronous request */ );
+        req.open('GET', BLOCKCHAIN_STATS_URL, false /* synchronous request */);
         req.send(null);
     } catch (e) {
         console.warn('Cannot connect to BlockChain:', e);
@@ -194,7 +218,7 @@ EntropyEstimator.prototype.getNist = function (pass) {
     var sum = 0.0;
     var j = 0;
     for (i = 0; i < passText.length; i++) {
-        if(passText[i] == ' ') {
+        if (passText[i] == ' ') {
             j = 0;
         } else {
             j = i;
