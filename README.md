@@ -83,14 +83,13 @@ Treating the passphrase as a string of characters and applying a brute-force gue
 feasible because the passphrases tend to be longer than typical passwords. Take a sample passphrase of
 `wood alcohol on the table` (longer than the previous example): it's 25 characters long and let's assume for simplicity
 it's built from an alphabet of only 26 characters (`a-z` and space).
-This gives a keyspace of 2e35 (<!-- 26**25 -->). Then, let's assume we can employ the
+This gives a keyspace of 2e35. Then, let's assume we can employ the
 [current Bitcoin hash rate](https://blockchain.info/charts/hash-rate) to crack
-passwords (which is around 3.5e17 in Q2 2015). This gives around 1e10 years <!-- 26**25/3.5e17/3600/24/365  --> to
-search the keyspace (while it would take only 7 seconds if the password was 13 characters long). <!-- 26**13/3.5e17 -->
+passwords (which is around 3.5e17 in Q2 2015). This gives around 1e10 years to
+search the keyspace (while it would take only 7 seconds if the password was 13 characters long). 
 
 The actual alphabets used by this generator are however much larger than the 26 characters from the example:
 they can range from 62 unique characters in Russian to 71 in English. This significantly increases the search time (1e21 years).
-<!-- math.log10(71**25/3.5e17/3600/24/365) -->
 
 ## Markov attacks
 
@@ -119,10 +118,10 @@ implementation):
 
 So even though the keyspace remains the same, chances are they will hit the right combination much faster: in my testing on
 6 character passwords Markov cracking tried all natural-language-looking strings in just 0.24% of the keyspace
-(5e5 <!-- math.log10(25**6*0.24/100) --> instead of 2e8<!-- math.log10(25**6) -->).
+(5e5 instead of 2e8).
 This doesn't *guarantee* a hit, but with natural language words it makes it  very likely.
 
-However, for full length passphrase, even with this reduction it's still in unreachable regions (4e18 years <!-- 71**25*0.24/100/3.5e17/3600/24/365 -->)
+However, for full length passphrase, even with this reduction it's still in unreachable regions (4e18 years)
 so character-by-character brute force attacks on passphrases aren't very practical.
 
 ## Dictionary combination attacks
@@ -133,7 +132,7 @@ take the same dictionary and try all possible combinations of *words*. Take this
      niepoprzekłuwany niewybębniany
 
 This attack may be still quite effective &mdash; for example, for two-word passphrases selected from a 300'000 words long dictionary
-there will be 90 billions <!-- 3e5**2 --> of combinations (9e10), which can be searched... in a minute using a
+there will be 90 billions of combinations (9e10), which can be searched... in a minute using a
 [GPU](https://en.wikipedia.org/wiki/Graphics_processing_unit)-powered crackers
 like [oclHashCat](http://hashcat.net/oclhashcat/) on a middle-class gaming computer:
 
@@ -166,8 +165,9 @@ remember we're modelling this now for a medium class gaming computer.
 The [Bitcoin hash rate surge](https://blockchain.info/charts/hash-rate?timespan=all&showDataPoints=false&daysAverageString=1&show_header=true&scale=0&address=)
 has taught us that building GPU and ASIC-based hashing farms can be relatively inexpensive.
 As of 2015 the Bitcoin mining rate (which is technically SHA256 hashing rate) is in the regions of 3.5e17 hashes per second. Today's cost
-of reproducing this hash power can be estimated at around $157m, which is again not something completely unreachable. 
-<!--  437k BFL Monarchs at $360 of 800e9 h/s per unit -->
+of reproducing this hash power can be estimated at around $157m, which is again not something completely unreachable.
+ 
+*Note: this would be 437k ButterflyLabs Monarchs at $360 each, providing 800e9 h/s per unit*
 
 So, taking the BTC hash rate as reasonable limit of human capabilities, the times to crack would be now as follows (assuming 3e5 words dictionary):
 
