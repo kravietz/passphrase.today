@@ -39,7 +39,7 @@ function insertPassphrase(passphrase) {
     // actually insert the passphrase string
     output.textContent = pass_str;
     // rescale to fit without scrolling
-    output.rows = Math.ceil(pass_str.length/output.cols);
+    output.rows = 2 * Math.ceil(pass_str.length/output.cols);
 
     // update stats
     var p = document.getElementById('pp-character-entropy');
