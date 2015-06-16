@@ -85,7 +85,7 @@ EntropyEstimator.prototype.getCrackTime = function (passphrase) {
 EntropyEstimator.prototype.getCrackTimeExplain = function (passphrase) {
     return ['Keyspace with transforms is', this.getKeySpace(passphrase, true),
             '(it would be ', this.getKeySpace(passphrase, false), 'without)',
-            'so at', this.getHashRate(), 'Ghash/sec it would take',
+            'so at', this.getHashRate().toExponential(2), 'Ghash/sec it would take',
             this.getCrackTime(passphrase), 'seconds to crack it.'].join(' ');
 };
 
