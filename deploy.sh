@@ -1,10 +1,9 @@
 #!/bin/sh
 
 if [ ! -f compiler.jar ]; then
-    f="compiler-latest.zip"
-    wget "http://dl.google.com/closure-compiler/$f"
-    unzip -o "$f" compiler.jar
-    rm "$f"
+    wget -o closure-compiler.zip http://dl.google.com/closure-compiler/compiler-20150609.zip
+    unzip -o closure-compiler.zip compiler.jar
+    rm closure-compiler.zip
 fi
 
 if [ ! -f htmlcompressor-1.5.3.jar ]; then
@@ -23,7 +22,7 @@ if [ ! -d bootstrap ]; then
 fi
 
 if [ ! -d sjcl ]; then
-    git clone https://github.com/bitwiseshiftleft/sjcl.git
+    git clone --branch 1.0.3 https://github.com/bitwiseshiftleft/sjcl.git
     pushd sjcl
     ./configure --without-all --with-random --with-bn
     make
