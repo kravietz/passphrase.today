@@ -57,7 +57,7 @@ EntropyEstimator.prototype.getKeySpace = function (passphrase, transforms) {
         }
     }
 
-    return parseInt(keyspace_bn);
+    return parseInt(keyspace_bn).toExponential(2);
 };
 
 /**
