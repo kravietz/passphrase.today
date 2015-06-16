@@ -5,7 +5,7 @@
 "use strict";
 
 /** @const */ var /** number */ DEFAULT_TARGET_ENTROPY = 35;
-/** @const */ var /** number */ ENTROPY_STEP = 1;
+/** @const */ var /** number */ ENTROPY_STEP = 5;
 /** @const */ var /** string */ SPECIAL_CHARS = '!#$%&()*+,-./0123456789:;<=>?@[\\]^_{}~';
 
 /**
