@@ -178,11 +178,11 @@ EntropyEstimator.prototype.getHashRate = function () {
     // we're interested in the highest one
     if (blockchain_hash_rate > this.hash_rate) {
         this.hash_rate = blockchain_hash_rate; // update the object's value
-        if ('localStorage' in window) {
-            localStorage.setItem(LS_HASH_RATE, this.hash_rate);
-            localStorage.setItem(LS_HASH_RATE_TIMESTAMP, new Date());
-        }
+        'localStorage' in window && localStorage.setItem(LS_HASH_RATE, this.hash_rate);
     }
+
+    // but always record the last online check timestamp even so that local caching works
+    'localStorage' in window && localStorage.setItem(LS_HASH_RATE_TIMESTAMP, new Date());
 
     return this.hash_rate;
 
