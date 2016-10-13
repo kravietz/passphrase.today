@@ -4,7 +4,7 @@
  */
 "use strict";
 
-/** @const */ var /** string */ BLOCKCHAIN_STATS_URL = 'https://blockchain.info/q/hashrate';
+/** @const */ var /** string */ BLOCKCHAIN_STATS_URL = 'https://blockchain.info/q/hashrate?cors=true';
 /** @const */ var /** string */ LS_HASH_RATE = 'blockchain_hash_rate';
 /** @const */ var /** string */ LS_HASH_RATE_TIMESTAMP = 'blockchain_hash_rate_timestamp';
 
