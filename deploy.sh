@@ -73,7 +73,7 @@ cp robots.txt ${output}/
 cp fonts/* ${output}/fonts/
 
 cp cache.manifest ${output}/
-echo "# build $(date|md5)" >>${output}/cache.manifest
+echo "# build $(date|md5sum)" >>${output}/cache.manifest
 
 cp -a bootstrap ${output}/
 
