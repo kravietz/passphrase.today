@@ -1,13 +1,13 @@
 #!/bin/sh
 
 if [ ! -f compiler.jar ]; then
-    wget -o closure-compiler.zip http://dl.google.com/closure-compiler/compiler-20150609.zip
-    unzip -o closure-compiler.zip compiler.jar
-    rm closure-compiler.zip
+    wget http://dl.google.com/closure-compiler/compiler-latest.zip
+    unzip -o compiler-latest.zip closure-compiler-v20160911.jar
+    mv closure-compiler-v20160911.jar compiler.jar
 fi
 
 if [ ! -f htmlcompressor-1.5.3.jar ]; then
-    wget https://htmlcompressor.googlecode.com/files/htmlcompressor-1.5.3.jar
+    wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/htmlcompressor/htmlcompressor-1.5.3.jar
 fi
 
 if [ ! -f yuicompressor.jar ]; then
@@ -16,19 +16,22 @@ if [ ! -f yuicompressor.jar ]; then
 fi
 
 if [ ! -d bootstrap ]; then
-    wget https://github.com/twbs/bootstrap/releases/download/v3.3.4/bootstrap-3.3.4-dist.zip
-    unzip bootstrap-3.3.4-dist.zip
-    mv bootstrap-3.3.4-dist bootstrap
+    wget https://github.com/twbs/bootstrap/releases/download/v3.3.7/bootstrap-3.3.7-dist.zip
+    unzip bootstrap-3.3.7-dist.zip
+    mv bootstrap-3.3.7-dist bootstrap
 fi
 
 if [ ! -d sjcl ]; then
-    git clone --branch 1.0.3 https://github.com/bitwiseshiftleft/sjcl.git
+    git clone --branch 1.0.6 https://github.com/bitwiseshiftleft/sjcl.git
     pushd sjcl
     ./configure --without-all --with-random --with-bn
     make
     popd
 fi
 
+if [ ! -d dict ]; then
+    mkdir dict
+fi
 if [ ! -f dict/english.js ]; then
     python3 make_dictionaries.py
 fi
